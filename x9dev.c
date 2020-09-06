@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 Federico G. Benavento <benavento@gmail.com>
+ * Copyright (c) 2020 Michael Misch <michaelmisch1985@gmail.com> 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -43,7 +43,6 @@
 #include "dix.h"
 #include "miline.h"
 #include "shadow.h"
-#include "shadowfb.h"
 #include "x9dev.h"
 #include "keymap.h"
 #include "xkbsrv.h"
@@ -80,8 +79,6 @@ static PixmapFormatRec formats[] = {
 void
 OsVendorInit(void)
 {
-    char temp[] = "/tmp/x9dev.XXXXXX";
-    LogInit(mktemp(temp), NULL);
 }
 
 void
@@ -374,36 +371,6 @@ x9devCursorLimits(ScreenPtr spr, CursorPtr cpr, BoxPtr hot, BoxPtr topleft)
     *topleft = *hot;
 }
 
-
-#ifdef SHADOWFB
-static void
-x9devRefreshArea(ScrnInfoPtr ptr, int nbox, BoxPtr pbox)
-{
-    int x1, y1, x2, y2;
-
-    if(nbox <= 0)
-        return;
-
-    x1 = y1 = 100000;
-    x2 = y2 = -100000;
-    while(nbox--) {
-        if(x1 > pbox->x1)
-            x1 = pbox->x1;
-        if(y1 > pbox->y1)
-            y1 = pbox->y1;
-        if(x2 < pbox->x2)
-            x2 = pbox->x2;
-        if(y2 < pbox->y2)
-            y2 = pbox->y2;
-        pbox++;
-    }
-    x9devRefreshScreen(x1, y1, x2, y2);
-}
-
-
-#else
-
-
 static void
 x9devShadowUpdate(ScreenPtr pScreen, shadowBufPtr pBuf)
 {
@@ -437,11 +404,6 @@ x9devCreateResources(ScreenPtr pScreen)
 
     return ret;
 }
-
-
-#endif
-
-
 
 static Bool
 x9devScreenInit(int index, ScreenPtr pScreen, int argc, char *argv[])
@@ -504,16 +466,11 @@ x9devScreenInit(int index, ScreenPtr pScreen, int argc, char *argv[])
 
     miInitializeBackingStore(pScreen);
 
-#ifdef SHADOWFB
-   if (!ShadowFBInit(pScreen, x9devRefreshArea))
-        return FALSE;
-#else
    if (!shadowSetup(pScreen))
         return FALSE;
 
     x9devCreateResourcesPtr = pScreen->CreateScreenResources;
     pScreen->CreateScreenResources = x9devCreateResources;
-#endif
 
     if (!fbCreateDefColormap(pScreen))
         return FALSE;

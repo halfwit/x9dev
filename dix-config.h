@@ -24,6 +24,10 @@
 #ifndef _DIX_CONFIG_H_
 #define _DIX_CONFIG_H_
 
+#undef X_BYTE_ORDER
+#define X_BYTE_ORDER    X_LITTLE_ENDIAN
+#define BITMAP_BIT_ORDER    LSBFirst
+#define IMAGE_BYTE_ORDER    LSBFirst
 #define ABORTONFATALERROR  1
 #define BUILDERADDR "michaelmisch1985@gmail.com"
 #define PACKAGE "x9dev"

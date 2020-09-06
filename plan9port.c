@@ -1,7 +1,8 @@
+#define _PLAN9_SOURCE
 #include <u.h>
 
 /* Unix headers, then libc.h */
-
+#include <stdio.h>
 #include <libc.h>
 #include <draw.h>
 

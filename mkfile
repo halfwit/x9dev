@@ -172,20 +172,17 @@ OFILES=\
 	mitri.$O\
 	picture.$O\
 	render.$O\
-# xfree86 \
-	shadowfb.$O\
-	sfbmodule.$O\
 
 HFILES=\
 	dix-config.h
 
 <$PLAN9/src/mkone
 
-CFLAGS=-c -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -DSHADOWFB \
+CFLAGS=-c -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE \
 	-DHAVE_DIX_CONFIG_H -DPLAN9 -DT$objtype -I. -I../../include \
 	-I../../fb -I../../mi -I../../miext/damage -I../../miext/shadow -I../../randr \
-	-I../../render -I../../Xext -I../../Xi -I../xfree86/shadowfb \
-	-I/usr/local/include -I/usr/local/plan9/include \
+	-I../../render -I../../Xext -I../../Xi \
+	-I/usr/local/include -I/usr/local/plan9 \
 	-I/usr/local/include/pixman-1
 
 x9dev.$O: x9dev.c keymap.h x9dev.h
@@ -220,7 +217,4 @@ plan9port.$O: plan9port.c x9dev.h
 
 %.$O: ../../render/%.c
 	$CC $CFLAGS ../../render/$stem.c
-
-%.$O: ../xfree86/shadowfb/%.c
-	$CC $CFLAGS ../xfree86/shadowfb/$stem.c
 
