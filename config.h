@@ -1,0 +1,32 @@
+#define PACKAGE	"x9dev"
+
+/* libX11 */
+#define TCPCONN 1
+#define UNIXCONN 1
+#define NO_XLOCALEDIR 1
+#define USE_XCB 0
+#define X11_DATADIR "/usr/local/lib/X11"
+#define X11_LIBDIR "/usr/local/lib/X11"
+#define XCMS 1
+#define XERRORDB "/usr/local/lib/X11/XErrorDB"
+#define XF86BIGFONT 1
+#define XKB 1
+#define XKEYSYMDB "/usr/local/lib/X11/XKeysymDB"
+#define XLOCALEDATADIR "/usr/local/lib/X11/locale"
+#define XLOCALEDIR "/usr/local/lib/X11/locale"
+#define XLOCALELIBDIR "/usr/local/lib/X11/locale"
+
+/* libXfont */
+#define FONTCACHE 1
+#define LOADABLEFONTS 1
+#define XFONT_BDFFORMAT 1
+#define XFONT_BITMAP 1
+#define XFONT_BUILTINS 1
+#define XFONT_FC 1
+#define XFONT_FONTFILE 1
+#define XFONT_FREETYPE 1
+#define XFONT_PCFFORMAT 1
+#define XFONT_SNFFORMAT 1
+#define XFONT_SPEEDO 1
+#define XFONT_TYPE1 1
+#define X_GZIP_FONT_COMPRESSION 1
