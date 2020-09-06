@@ -184,8 +184,8 @@ HFILES=\
 CFLAGS=-c -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -DSHADOWFB \
 	-DHAVE_DIX_CONFIG_H -DPLAN9 -DT$objtype -I. -I../../include \
 	-I../../fb -I../../mi -I../../miext/damage -I../../miext/shadow -I../../randr \
-	-I../../render -I../../Xext -I../../Xi -I../xfree86/shadow \
-	-I/usr/local/include -I/usr/local/plan9 \
+	-I../../render -I../../Xext -I../../Xi -I../xfree86/shadowfb \
+	-I/usr/local/include -I/usr/local/plan9/include \
 	-I/usr/local/include/pixman-1
 
 x9dev.$O: x9dev.c keymap.h x9dev.h
