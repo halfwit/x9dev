@@ -21,7 +21,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <dix-config.h>
 #include <X11/X.h>
 #define NEED_EVENTS
 #include <X11/Xproto.h>
@@ -376,7 +375,7 @@ x9devShadowUpdate(ScreenPtr pScreen, shadowBufPtr pBuf)
 {
     BoxPtr pbox;
 
-    pbox = REGION_EXTENTS(pScreen, &pBuf->damage);
+    pbox = REGION_EXTENTS(pScreen, &pBuf->pDamage);
     x9devRefreshScreen(pbox->x1, pbox->y1, pbox->x2, pbox->y2);
 }
 

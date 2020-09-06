@@ -1,12 +1,10 @@
 #define _PLAN9_SOURCE
 #include <u.h>
-
-/* Unix headers, then libc.h */
-#include <stdio.h>
+#include <sys/types.h>
 #include <libc.h>
-#include <draw.h>
 
 #include <keyboard.h>
+#include "draw.h"
 #include "x9dev.h"
 
 extern void ErrorF(char *, ...);
@@ -26,7 +24,6 @@ x9devInfoInit(void)
     x9di.depth = screen->depth;
     x9di.width = Dx(screen->r);
     x9di.width -= x9di.width&(screen->depth/8);
-    /* TODO: Allow tunable */
     x9di.dpi = 100;
     x9di.bpl = bytesperline(Rect(0, 0, x9di.width, x9di.height), x9di.depth);
     x9di.fb = malloc(x9di.bpl * x9di.height);

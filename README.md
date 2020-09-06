@@ -26,6 +26,18 @@ Requires plan9port
 # currently this builds against xorg-server 1.20
 git clone https://github.com/halfwit/x9dev
 mv x9dev /path/to/xorg-server-source/hw/
-cd /path/to/xorg-server-source/hw/x9dev
-mk build; mk install
+cd /path/to/xorg-server-source/
+
+# Add our entry to the meson build
+echo '
+if build_x9dev
+    subdir('x9dev')
+endif
+' >> hw/meson.build
+
+meson build
+meson configure build/ -Dbuild_x9dev=true
+ninja -C build -j 8 # or however many processors you have
+
+install -m644 hw/x9dev /usr/local/bin/x9dev
 ```
