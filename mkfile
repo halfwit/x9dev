@@ -3,11 +3,10 @@
 BIN=/usr/local/bin
 
 TARG=x9dev
-CC=cc
+
 OFILES=\
 	x9dev.$O\
 	plan9port.$O\
-	shadowfb.$O\
 # Xext \
 	shape.$O\
 	xres.$O\
@@ -173,6 +172,9 @@ OFILES=\
 	mitri.$O\
 	picture.$O\
 	render.$O\
+# xfree86 \
+	shadowfb.$O\
+	sfbmodule.$O\
 
 HFILES=\
 	dix-config.h
@@ -182,14 +184,12 @@ HFILES=\
 CFLAGS=-c -D_POSIX_SOURCE -D_BSD_EXTENSION -D_SUSV2_SOURCE -DSHADOWFB \
 	-DHAVE_DIX_CONFIG_H -DPLAN9 -DT$objtype -I. -I../../include \
 	-I../../fb -I../../mi -I../../miext/damage -I../../miext/shadow -I../../randr \
-	-I../../render -I../../Xext -I../../Xi \
-	-I/opt/X11/include -I/opt/X11/include/pixman-1  \
-	-I/opt/X11/include/xorg \
-	-I/Users/halfwit/Library/Plan9/include #-DDEBUG
+	-I../../render -I../../Xext -I../../Xi -I../xfree86/shadow \
+	-I/usr/local/include -I/usr/local/plan9 \
+	-I/usr/local/include/pixman-1
 
 x9dev.$O: x9dev.c keymap.h x9dev.h
 plan9port.$O: plan9port.c x9dev.h
-shadowfb.$O: sfbmodule.c shadowfb.h
 
 %.$O: ../../Xext/%.c
 	$CC  $CFLAGS -I../xfree86/dixmods/extmod ../../Xext/$stem.c
@@ -220,4 +220,7 @@ shadowfb.$O: sfbmodule.c shadowfb.h
 
 %.$O: ../../render/%.c
 	$CC $CFLAGS ../../render/$stem.c
+
+%.$O: ../xfree86/shadowfb/%.c
+	$CC $CFLAGS ../xfree86/shadowfb/$stem.c
 
