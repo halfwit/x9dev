@@ -4,7 +4,7 @@
 #include <libc.h>
 
 #include <keyboard.h>
-#include "draw.h"
+#include <draw.h>
 #include "x9dev.h"
 
 extern void ErrorF(char *, ...);
@@ -15,7 +15,6 @@ x9devInfo x9di;
 void
 x9devInfoInit(void)
 {
-    Rectangle r;
     char    buf[256];
 
     if(initdraw(NULL, 0, "x9dev") < 0)
@@ -128,10 +127,6 @@ x9devKeybdRead(void)
             return 0;
         }
         n = 0;
-    }
-    if (rune == Kdel) {
-        ErrorF("delete\n");
-        raise(SIGINT);
     }
     if (rune == Kdown)
         rune = 0x99;

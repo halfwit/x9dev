@@ -4,18 +4,16 @@ srcs = [
     '../../mi/miinitext.c',
 ]
 
-x9dev_dep = [
-    common_dep,
-]
-
 x9dev_server = executable(
     'x9dev',
     srcs,
     include_directories: [
 	inc,
-	include_directories('/usr/local/plan9/include')
-    ], 
-    dependencies: x9dev_dep,
+	include_directories('/usr/local/plan9/include'),
+    ],
+    dependencies: [
+        common_dep,
+    ],
     link_with: [
         libxserver_main,
         libxserver_fb,
@@ -23,6 +21,7 @@ x9dev_server = executable(
         libxserver_xkb_stubs,
         libxserver_glx,
         libglxvnd,
+        libxserver_miext_shadow,
     ],
     install: true,
 )

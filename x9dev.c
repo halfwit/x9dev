@@ -51,6 +51,8 @@
 #include "xkbsrv.h"
 #include "xserver-properties.h"
 #include "keymap.h"
+#include "exevents.h"
+#include "extinit.h"
 
 static DeviceIntPtr x9devMouse;
 static DeviceIntPtr x9devKeybd;
@@ -112,15 +114,6 @@ ddxUseMsg(void)
 {
 }
 
-
-void
-ddxInitGlobals(void)
-{
-    whiteRoot = TRUE;
-    dispatchExceptionAtReset = FALSE;
-}
-
-
 void
 DDXRingBell(int volume, int pitch, int duration)
 {
@@ -139,7 +132,6 @@ LegalModifier(unsigned int k, DeviceIntPtr pDev)
 {
     return modmap[k] != 0;
 }
-
 
 void
 ProcessInputEvents(void)
@@ -243,19 +235,11 @@ x9devMouseHandle(void)
 }
 
 
-extern fd_set EnabledDevices, LastSelectMask;
-
 static void
-x9devWakeupHandler(int index, pointer blockData, unsigned long result, pointer pReadmask)
+x9devWakeupHandler(ScreenPtr scr, int result)
 {
 
-    fd_set fs;
-
     if (result <= 0)
-        return;
-
-    XFD_ANDSET(&fs, &LastSelectMask, &EnabledDevices);
-    if (!XFD_ANYSET(&fs))
         return;
 
     while (x9devMouseHandle())
@@ -293,29 +277,24 @@ x9devInitModmap(void)
 
 
 static int  
-x9devKeybdProc(DeviceIntPtr pDevice, int what)
+x9devKeybdProc(DeviceIntPtr pDev, int what)
 {
-    DevicePtr pDev = (DevicePtr)pDevice;
 
     switch (what) {
     case DEVICE_INIT:
         x9devInitModmap();
-        /* The middle two need to go away to an Xkb call */
-        //if (!InitKeyboardDeviceStruct(pDev, &keysyms, modmap, 
-        if(!InitKeyboardDeviceStruct(pDev, NULL,
+        if (!InitKeyboardDeviceStruct(pDev, NULL, 
             (BellProcPtr)NoopDDA, (KbdCtrlProcPtr)NoopDDA))
             FatalError("can't init keyboard");
+	pDev->inited = TRUE;
         break;
-
     case DEVICE_ON:
-        pDev->on = TRUE;
-        AddEnabledDevice(x9di.keybdFd);
+        pDev->enabled = TRUE;
         break;
-
     case DEVICE_CLOSE:
+	break;
     case DEVICE_OFF:
-        pDev->on = FALSE;
-        RemoveEnabledDevice(x9di.keybdFd);
+        pDev->enabled = FALSE;
         break;
     }
     return Success;
@@ -330,28 +309,26 @@ x9devMouseProc(DeviceIntPtr pDevice, int what)
     Atom btn_labels[3] = {0};
     Atom axes_labels[2] = {0};
 
-    btn_labels[0] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_LEFT);
-    btn_labels[1] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_MIDDLE);
-    btn_labels[2] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_RIGHT);
-
-    axes_labels[0] = XIGetKnownProperty(AXIS_LABEL_PROP_REL_X);
-    axes_labels[1] = XIGetKnownProperty(AXIS_LABEL_PROP_REL_Y);
 
     switch (what) {
     case DEVICE_INIT:
+        btn_labels[0] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_LEFT);
+        btn_labels[1] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_MIDDLE);
+        btn_labels[2] = XIGetKnownProperty(BTN_LABEL_PROP_BTN_RIGHT);
+
+        axes_labels[0] = XIGetKnownProperty(AXIS_LABEL_PROP_REL_X);
+        axes_labels[1] = XIGetKnownProperty(AXIS_LABEL_PROP_REL_Y);
         InitPointerDeviceStruct(pDev, map, 3, btn_labels,
             (PtrCtrlProcPtr)NoopDDA, GetMotionHistorySize(), 2, axes_labels);
         break;
 
     case DEVICE_ON:
         pDev->on = TRUE;
-        AddEnabledDevice(x9di.mouseFd);
         break;
 
     case DEVICE_CLOSE:
     case DEVICE_OFF:
         pDev->on = FALSE;
-        RemoveEnabledDevice(x9di.mouseFd);
         break;
     }
     return Success;
@@ -361,16 +338,20 @@ x9devMouseProc(DeviceIntPtr pDevice, int what)
 void
 InitInput(int argc, char *argv[])
 {
+    Atom xiclass;
+    
     x9devMouse = AddInputDevice(serverClient, x9devMouseProc, TRUE);
-    RegisterPointerDevice(x9devMouse);
     x9devKeybd = AddInputDevice(serverClient, x9devKeybdProc, TRUE);
-    RegisterKeyboardDevice(x9devKeybd);
+    xiclass = MakeAtom(XI_MOUSE, sizeof(XI_MOUSE) - 1, TRUE);
+    AssignTypeAndName(x9devMouse, xiclass, "x9dev mouse");
+    xiclass = MakeAtom(XI_KEYBOARD, sizeof(XI_KEYBOARD) - 1, TRUE);
+    AssignTypeAndName(x9devKeybd, xiclass, "x9dev keyboard");
+
     mieqInit();
 }
 
-
 static void
-x9devCursorLimits(ScreenPtr spr, CursorPtr cpr, BoxPtr hot, BoxPtr topleft)
+x9devCursorLimits(DeviceIntPtr dptr, ScreenPtr spr, CursorPtr cpr, BoxPtr hot, BoxPtr topleft)
 {
     *topleft = *hot;
 }
@@ -391,7 +372,7 @@ static CreateScreenResourcesProcPtr x9devCreateResourcesPtr;
 static Bool
 x9devCreateResources(ScreenPtr pScreen)
 {
-    Bool ret;
+    Bool ret = 0;
 
     pScreen->CreateScreenResources = x9devCreateResourcesPtr;
     if (pScreen->CreateScreenResources)
@@ -410,13 +391,12 @@ x9devCreateResources(ScreenPtr pScreen)
 }
 
 static Bool
-x9devScreenInit(int index, ScreenPtr pScreen, int argc, char *argv[])
+x9devScreenInit(ScreenPtr pScreen, int argc, char *argv[])
 {
     int v, i;
     unsigned long   r, g, b;
     static int  first = 1;
 
-    assert(index == 0);
     if (first) {
         x9devInfoInit();
         first = 0;
@@ -468,8 +448,6 @@ x9devScreenInit(int index, ScreenPtr pScreen, int argc, char *argv[])
         return FALSE;
 #endif
 
-    miInitializeBackingStore(pScreen);
-
    if (!shadowSetup(pScreen))
         return FALSE;
 
@@ -484,17 +462,17 @@ x9devScreenInit(int index, ScreenPtr pScreen, int argc, char *argv[])
 
 
 void
-InitOutput(ScreenInfo *screenInfo, int argc, char *argv[])
+InitOutput(ScreenInfo *si, int argc, char *argv[])
 {
     int i;
 
-    screenInfo->imageByteOrder = IMAGE_BYTE_ORDER;
-    screenInfo->bitmapScanlineUnit = BITMAP_SCANLINE_UNIT;
-    screenInfo->bitmapScanlinePad = BITMAP_SCANLINE_PAD;
-    screenInfo->bitmapBitOrder = BITMAP_BIT_ORDER;
-    screenInfo->numPixmapFormats = NUMFORMATS;
+    si->imageByteOrder = IMAGE_BYTE_ORDER;
+    si->bitmapScanlineUnit = BITMAP_SCANLINE_UNIT;
+    si->bitmapScanlinePad = BITMAP_SCANLINE_PAD;
+    si->bitmapBitOrder = BITMAP_BIT_ORDER;
+    si->numPixmapFormats = NUMFORMATS;
     for (i = 0; i < NUMFORMATS; i++)
-        screenInfo->formats[i] = formats[i];
+        si->formats[i] = formats[i];
     if (AddScreen(x9devScreenInit, argc, argv) < 0)
         FatalError("InitOutput: can't addscreen");
 }
