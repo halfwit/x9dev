@@ -1,13 +1,21 @@
 srcs = [
-    'plan9.c',
     'x9dev.c',
-    'x9dev.h',
+    'plan9.c',
+    '../../mi/miinitext.c',
+]
+
+x9dev_dep = [
+    common_dep,
 ]
 
 x9dev_server = executable(
     'x9dev',
     srcs,
-    include_directories: inc,
+    include_directories: [
+	inc,
+	include_directories('/usr/local/plan9/include')
+    ], 
+    dependencies: x9dev_dep,
     link_with: [
         libxserver_main,
         libxserver_fb,

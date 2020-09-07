@@ -1,0 +1,28 @@
+diff --git a/hw/meson.build b/hw/meson.build
+index 96c1559c3..a1b05fbba 100644
+--- a/hw/meson.build
++++ b/hw/meson.build
+@@ -6,6 +6,10 @@ if get_option('dmx')
+     subdir('dmx')
+ endif
+ 
++if get_option('x9dev')
++    subdir('x9dev')
++endif
++
+ if get_option('xvfb')
+     subdir('vfb')
+ endif
+diff --git a/meson_options.txt b/meson_options.txt
+index 1a07745e0..177f76c70 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -12,6 +12,8 @@ option('xnest', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto'
+        description: 'Enable Xnest nested X server')
+ option('dmx', type: 'boolean', value: false,
+        description: 'Enable DMX nested X server')
++option('x9dev', type: 'boolean', value: true,
++       description: 'Enable x9dev X server')
+ option('xvfb', type: 'boolean', value: true,
+        description: 'Enable Xvfb X server')
+ option('xwin', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',

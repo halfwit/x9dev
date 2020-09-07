@@ -21,7 +21,12 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#ifdef HAVE_DIX_CONFIG_H
+#include <dix-config.h>
+#endif
+
 #include <X11/X.h>
+#include "mi.h"
 #define NEED_EVENTS
 #include <X11/Xproto.h>
 #include <X11/Xos.h>
@@ -43,9 +48,9 @@
 #include "miline.h"
 #include "shadow.h"
 #include "x9dev.h"
-#include "keymap.h"
 #include "xkbsrv.h"
 #include "xserver-properties.h"
+#include "keymap.h"
 
 static DeviceIntPtr x9devMouse;
 static DeviceIntPtr x9devKeybd;
