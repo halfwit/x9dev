@@ -47,7 +47,7 @@
 #include "dix.h"
 #include "miline.h"
 #include "shadow.h"
-#include "x9dev.h"
+#include "plan9/plan9.h"
 #include "xkbsrv.h"
 #include "xserver-properties.h"
 #include "keymap.h"

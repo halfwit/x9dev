@@ -40,6 +40,6 @@ extern x9devInfo x9di;
 
 void    x9devInfoInit(void);
 void    x9devRefreshScreen(int, int, int, int);
-int x9devMouseRead(int *, int *, int *);
+int     x9devMouseRead(int *, int *, int *);
 wchar_t x9devKeybdRead(void);
 
