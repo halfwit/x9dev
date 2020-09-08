@@ -36,4 +36,5 @@ struct x9devInfo
     int consctlFd;
 };
 
-extern x9devInfo x9di;
+#define KF	0xF000
+#define Kdown	0x80

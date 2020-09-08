@@ -47,21 +47,18 @@
 #include "dix.h"
 #include "miline.h"
 #include "shadow.h"
-#include "plan9/plan9.h"
 #include "xkbsrv.h"
 #include "xserver-properties.h"
-#include "keymap.h"
 #include "exevents.h"
 #include "extinit.h"
+#include "keymap.h"
+#include "x9dev.h"
+
+x9devInfo x9di;
 
 static DeviceIntPtr x9devMouse;
 static DeviceIntPtr x9devKeybd;
 static int  oldx, oldy, oldbut;
-
-static KeySymsRec keysyms = {
-    map,    MIN_KEYCODE,    MAX_KEYCODE,    MAP_WIDTH
-};
-
 
 static CARD8 modmap[MAP_LENGTH];
 
@@ -173,7 +170,6 @@ x9devSendMouseEvent(int x, int y, int b, int t)
 static void
 x9devRefreshScreen(int x1, int y1, int x2, int y2)
 {
-    USED(x1); USED(x2); USED(y1); USED(y2);
     /* 
     Rectangle r;
     uchar *p;

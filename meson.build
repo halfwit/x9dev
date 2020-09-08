@@ -1,8 +1,10 @@
-subdir('plan9')
-
 srcs = [
     'x9dev.c',
     '../../mi/miinitext.c',
+]
+
+cc_args = [
+    '-Wno-missing-braces',
 ]
 
 x9dev_server = executable(
@@ -10,6 +12,7 @@ x9dev_server = executable(
     srcs,
     include_directories: inc, 
     dependencies: common_dep,
+    object: '/usr/local/plan9/lib/libdraw.a',
     link_with: [
         libxserver_main,
         libxserver_fb,
@@ -20,6 +23,7 @@ x9dev_server = executable(
         libxserver_miext_shadow,
     ],
     install: true,
+    c_args: cc_args,
 )
 
 install_man(configure_file(
