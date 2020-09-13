@@ -1,5 +1,7 @@
 # x9dev
 
+__*THIS IS A WORK IN PROGRESS*__
+
 x9dev is an x11 server which interacts with plan9's /dev filesystem.
 This started as a fork of http://plan9.stanleylieber.com/pkg/386/equis-2012.01.11.tbz
 
