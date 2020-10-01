@@ -9,9 +9,12 @@ This started as a fork of http://plan9.stanleylieber.com/pkg/386/equis-2012.01.1
 
 ## Usage
 
-`x9dev` is meant to be called via an external dial implementation.
+`x9dev [-u] [-s screen]`
 
-For example, with x9srv on a POSIX system
+- `-u` creates a unique session
+- `-s screen` attaches to a named session
+
+`x9dev` is meant to be called via an external dial implementation. For example, with x9srv on a POSIX system
 
 `tlsclient 'tcp!192.168.1.2!17019' x9dev`
 
