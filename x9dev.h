@@ -21,20 +21,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#ifndef _X9DEV_H_
+#define _X9DEV_H_
+#include <stdio.h>
+#include <unistd.h>
+
 typedef struct x9devInfo x9devInfo;
 
 struct x9devInfo
 {
     char    *fb;
-    int depth;
-    int width;
-    int height;
-    int dpi;
-    int bpl;
-    int mouseFd;
-    int keybdFd;
-    int consctlFd;
+    int     depth;
+    int     width;
+    int     height;
+    int     dpi;
+    int     bpl;
+    int     mouseFd;
+    int     keybdFd;
+    int     consctlFd;
 };
 
-#define KF	0xF000
-#define Kdown	0x80
+#define KF      0xF000
+#define Kdown   0x80
+
+#endif
