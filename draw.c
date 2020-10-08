@@ -25,9 +25,6 @@
 #include <dix-config.h>
 #endif
 
-
-#include <X11/X.h>
-#include "mi.h"
 #define NEED_EVENTS
 #include <X11/Xproto.h>
 #include <X11/Xos.h>
@@ -36,13 +33,11 @@
 #define XK_PUBLISHING
 #include <X11/keysym.h>
 #include <X11/keysymdef.h>
-#include "scrnintstr.h"
 #include "servermd.h"
 #define PSZ 8
 #include "fb.h"
 #include "colormapst.h"
 #include "gcstruct.h"
-#include "input.h"
 #include "mipointer.h"
 #include "micmap.h"
 #include "dix.h"
@@ -57,8 +52,8 @@
 
 x9devInfo x9di;
 
-static DeviceIntPtr x9devMouse;
-static DeviceIntPtr x9devKeybd;
+extern DeviceIntPtr x9devMouse;
+extern DeviceIntPtr x9devKeybd;
 static int  oldx, oldy, oldbut;
 
 static CARD8 modmap[MAP_LENGTH];
@@ -206,7 +201,7 @@ x9devKeybdRead(void)
 static void
 x9devInfoInit(void)
 {
-/*
+
     char    buf[256];
 
     if(initdraw(NULL, 0, "x9dev") < 0)
@@ -237,7 +232,6 @@ x9devInfoInit(void)
         FatalError("can't open consctl");
     if(c9write(x9di.consctlFd, "rawon", 5) != 5)
         FatalError("can't set rawon");
-*/
 }
 
 static int  
@@ -368,7 +362,7 @@ x9devKeybdProc(DeviceIntPtr pDev, int what)
     return Success;
 }
 
-static int  
+int  
 x9devMouseProc(DeviceIntPtr pDevice, int what)
 {
     static unsigned char    map[] = {0, 1, 2, 3, 4, 5};
@@ -441,7 +435,7 @@ x9devCreateResources(ScreenPtr pScreen)
     return ret;
 }
 
-static Bool
+Bool
 x9devScreenInit(ScreenPtr pScreen, int argc, char *argv[])
 {
     int v, i;

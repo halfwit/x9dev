@@ -23,9 +23,11 @@
 
 #ifndef _X9DEV_H_
 #define _X9DEV_H_
-#include <stdio.h>
-#include <unistd.h>
+#include <X11/X.h>
 
+#include "mi.h"
+#include "input.h"
+#include "scrnintstr.h"
 typedef struct x9devInfo x9devInfo;
 
 struct x9devInfo
@@ -43,5 +45,11 @@ struct x9devInfo
 
 #define KF      0xF000
 #define Kdown   0x80
+
+DeviceIntPtr x9devMouse;
+DeviceIntPtr x9devKeybd;
+
+Bool x9devScreenInit(ScreenPtr, int, char **);
+int  x9devMouseProc(DeviceIntPtr, int);
 
 #endif

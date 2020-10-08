@@ -25,6 +25,7 @@
 #include <dix-config.h>
 #endif
 #include "glx_extinit.h"
+#include "x9dev.h"
 
 void
 InitOutput(ScreenInfo *si, int argc, char *argv[])
