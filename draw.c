@@ -34,14 +34,6 @@ static int  oldx, oldy, oldbut;
 
 static CARD8 modmap[MAP_LENGTH];
 
-static PixmapFormatRec formats[] = {
-    { 1,    1,  BITMAP_SCANLINE_PAD },
-    { 8,    8,  BITMAP_SCANLINE_PAD },
-    { 16,   16,     BITMAP_SCANLINE_PAD },
-    { 24,   24,     BITMAP_SCANLINE_PAD },
-    { 32,   32,     BITMAP_SCANLINE_PAD }
-};
-
 #define x9devSaveScreen (void *) NoopDDA
 #define x9devConstrainCursor    (void *) NoopDDA
 #define x9devDisplayCursor  (void *) NoopDDA

@@ -70,6 +70,14 @@ struct x9devInfo
 #define Kdown   0x80
 #define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
 
+static PixmapFormatRec formats[] = {
+    { 1,    1,  BITMAP_SCANLINE_PAD },
+    { 8,    8,  BITMAP_SCANLINE_PAD },
+    { 16,   16,     BITMAP_SCANLINE_PAD },
+    { 24,   24,     BITMAP_SCANLINE_PAD },
+    { 32,   32,     BITMAP_SCANLINE_PAD }
+};
+
 DeviceIntPtr x9devMouse;
 DeviceIntPtr x9devKeybd;
 
