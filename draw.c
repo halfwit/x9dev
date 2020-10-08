@@ -314,7 +314,7 @@ x9devInitModmap(void)
         }
 }
 
-static int  
+int  
 x9devKeybdProc(DeviceIntPtr pDev, int what)
 {
 

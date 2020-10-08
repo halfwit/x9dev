@@ -74,6 +74,7 @@ DeviceIntPtr x9devKeybd;
 
 Bool x9checkmod(unsigned int, DeviceIntPtr);
 Bool x9devScreenInit(ScreenPtr, int, char **);
-int  x9devMouseProc(DeviceIntPtr, int);
+int x9devKeybdProc(DeviceIntPtr, int);
+int x9devMouseProc(DeviceIntPtr, int);
 
 #endif
