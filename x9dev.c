@@ -24,7 +24,6 @@
 #ifdef HAVE_DIX_CONFIG_H
 #include <dix-config.h>
 #endif
-#include "glx_extinit.h"
 #include "x9dev.h"
 
 void

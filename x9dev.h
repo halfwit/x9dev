@@ -23,9 +23,32 @@
 
 #ifndef _X9DEV_H_
 #define _X9DEV_H_
-#include <X11/X.h>
 
+#define NEED_EVENTS
+#include <X11/Xproto.h>
+#include <X11/Xos.h>
+#include <X11/Xpoll.h>
+#define XK_TECHNICA
+#define XK_PUBLISHING
+#include <X11/keysym.h>
+#include <X11/keysymdef.h>
+#include "servermd.h"
+#define PSZ 8
+#include "fb.h"
+#include "colormapst.h"
+#include "gcstruct.h"
+#include "mipointer.h"
+#include "micmap.h"
+#include "dix.h"
+#include "miline.h"
+#include "shadow.h"
+#include "xkbsrv.h"
+#include "xserver-properties.h"
+#include "exevents.h"
+#include "extinit.h"
+#include "keymap.h"
 #include "mi.h"
+#include "glx_extinit.h"
 #include "input.h"
 #include "scrnintstr.h"
 typedef struct x9devInfo x9devInfo;

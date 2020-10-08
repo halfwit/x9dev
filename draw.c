@@ -20,34 +20,10 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 #ifdef HAVE_DIX_CONFIG_H
 #include <dix-config.h>
 #endif
 
-#define NEED_EVENTS
-#include <X11/Xproto.h>
-#include <X11/Xos.h>
-#include <X11/Xpoll.h>
-#define XK_TECHNICA
-#define XK_PUBLISHING
-#include <X11/keysym.h>
-#include <X11/keysymdef.h>
-#include "servermd.h"
-#define PSZ 8
-#include "fb.h"
-#include "colormapst.h"
-#include "gcstruct.h"
-#include "mipointer.h"
-#include "micmap.h"
-#include "dix.h"
-#include "miline.h"
-#include "shadow.h"
-#include "xkbsrv.h"
-#include "xserver-properties.h"
-#include "exevents.h"
-#include "extinit.h"
-#include "keymap.h"
 #include "x9dev.h"
 
 x9devInfo x9di;
