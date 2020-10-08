@@ -72,6 +72,7 @@ struct x9devInfo
 DeviceIntPtr x9devMouse;
 DeviceIntPtr x9devKeybd;
 
+Bool x9checkmod(unsigned int, DeviceIntPtr);
 Bool x9devScreenInit(ScreenPtr, int, char **);
 int  x9devMouseProc(DeviceIntPtr, int);
 

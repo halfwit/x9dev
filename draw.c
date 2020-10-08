@@ -480,3 +480,9 @@ x9devScreenInit(ScreenPtr pScreen, int argc, char *argv[])
 
     return TRUE;
 }
+
+Bool
+x9checkmod(unsigned int k, DeviceIntPtr pDev)
+{
+    return modmap[k] != 0;
+}

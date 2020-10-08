@@ -105,7 +105,7 @@ OsVendorInit(void)
 Bool
 LegalModifier(unsigned int k, DeviceIntPtr pDev)
 {
-    return modmap[k] != 0;
+    return x9checkmod(k, pDev);
 }
 
 void
