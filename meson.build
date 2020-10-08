@@ -1,6 +1,10 @@
 srcs = [
     'x9dev.c',
+    'draw.c',
+    'io.c'
     '../../mi/miinitext.c',
+    'x9dev.h',
+    'keymap.h',
 ]
 
 cc_args = [
