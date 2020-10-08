@@ -67,7 +67,13 @@ ddxUseMsg(void)
 int
 ddxProcessArgument(int argc, char **argv, int i)
 {
-    // Passed in arg[i], act on it
+    switch(argv[i]){
+        case "-D": 
+            debug++;
+        return 1;
+    }
+
+    return 0;
 }
 
 void
