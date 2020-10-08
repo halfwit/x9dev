@@ -68,6 +68,7 @@ struct x9devInfo
 
 #define KF      0xF000
 #define Kdown   0x80
+#define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
 
 DeviceIntPtr x9devMouse;
 DeviceIntPtr x9devKeybd;

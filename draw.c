@@ -42,7 +42,6 @@ static PixmapFormatRec formats[] = {
     { 32,   32,     BITMAP_SCANLINE_PAD }
 };
 
-#define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
 #define x9devSaveScreen (void *) NoopDDA
 #define x9devConstrainCursor    (void *) NoopDDA
 #define x9devDisplayCursor  (void *) NoopDDA
