@@ -1,7 +1,8 @@
 srcs = [
     'x9dev.c',
     'draw.c',
-    'io.c',
+    'c9/c9.c',
+    'c9/c9.h',
     '../../mi/miinitext.c',
     'x9dev.h',
     'keymap.h',

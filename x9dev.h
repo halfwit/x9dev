@@ -51,6 +51,8 @@
 #include "glx_extinit.h"
 #include "input.h"
 #include "scrnintstr.h"
+#include "c9/c9.h"
+
 typedef struct x9devInfo x9devInfo;
 
 struct x9devInfo
