@@ -61,7 +61,7 @@ x9devResize(void)
     if (getwindow(_display, Refnone) < 0)
         FatalError("can't reattach to window");
 
-    draw(screen, screen->r, _display->white, nil, ZP);
+    draw(screen, screen->r, _display->white, NULL, ZP);
     x9devRefreshScreen(0, 0, x9di.width, x9di.height);
 }
 
