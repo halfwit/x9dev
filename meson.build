@@ -19,7 +19,7 @@ x9dev_server = executable(
     link_with: [
         c9,
         libdraw,
-        libxserver_mi
+        libxserver_mi,
         libxserver_main,
         libxserver_fb,
         libxserver,

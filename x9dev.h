@@ -104,7 +104,6 @@ static PixmapFormatRec formats[] = {
 DeviceIntPtr x9devMouse;
 DeviceIntPtr x9devKeybd;
 x9devInfo x9di;
-Screen *screen;
 
 /* Callbacks, etc */
 Bool x9checkmod(unsigned int, DeviceIntPtr);
