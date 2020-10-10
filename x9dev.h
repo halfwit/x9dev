@@ -69,6 +69,7 @@
 
 typedef struct x9file x9file;
 struct x9file {
+    C9fid    fid;
     C9tag    tag;
 	uint8_t  rdbuf[Msize];
 	uint8_t  wrbuf[Msize];
@@ -85,10 +86,8 @@ struct x9devInfo
     int     dpi;
     int     bpl;
     C9ctx   *ctx;
-    /* Our three files we care about */
     x9file  *mouse;
     x9file  *keybd;
-    x9file  *draw;
 };
 
 int debug = 0;

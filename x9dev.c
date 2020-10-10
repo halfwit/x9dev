@@ -29,9 +29,148 @@
 
 extern x9devInfo x9di;
 
+/* 
+ * 9p functions, used in draw and here 
+ */
+static int
+wrsend(C9aux *a)
+{
+	uint32_t n;
+	int w;
+
+	for (n = 0; n < a->wroff; n += w) {
+		if ((w = write(a->f, a->wrbuf+n, a->wroff-n)) <= 0) {
+			if (errno == EINTR)
+				continue;
+			if (errno != EPIPE) /* remote end closed */
+				perror("write");
+			return -1;
+		}
+	}
+	a->wroff = 0;
+
+	return 0;
+}
+
+static uint8_t *
+ctxbegin(C9ctx *ctx, uint32_t size)
+{
+    /* Should return a buffer to store 'size' bytes. Nil means no memory. */
+	uint8_t *b;
+	C9aux *a;
+
+	a = ctx->aux;
+	if (a->wroff + size > sizeof(a->wrbuf)) {
+		if (wrsend(a) != 0 || a->wroff + size > sizeof(a->wrbuf))
+			return NULL;
+	}
+	b = a->wrbuf + a->wroff;
+	a->wroff += size;
+
+	return b;
+}
+
+static int
+ctxend(C9ctx *ctx)
+{
+    /*
+	 * Marks the end of a message. Callback may decide if any accumulated
+	 * messages should be sent to the server/client.
+	 */
+	(void)ctx;
+	return 0;
+}
+
+static uint8_t *
+ctxread(C9ctx *ctx, uint32_t size, int *err)
+{
+    /*
+	 * Should return a pointer to the data (exactly 'size' bytes) read.
+	 * Set 'err' to non-zero and return NULL in case of error.
+	 * 'err' set to zero (no error) should be used to return from c9process
+	 * early (timeout on read to do non-blocking operations, for example).
+	 */
+	uint32_t n;
+	int r;
+	C9aux *a;
+
+	a = ctx->aux;
+	*err = 0;
+	for (n = 0; n < size; n += r) {
+		if ((r = read(a->f, a->rdbuf+n, size-n)) <= 0) {
+			if (errno == EINTR)
+				continue;
+			close(a->f);
+			return NULL;
+		}
+	}
+
+	return a->rdbuf;
+}
+
+__attribute__ ((format (printf, 1, 2)))
+static void
+ctxerror(const char *fmt, ...)
+{
+
+	va_list ap;
+
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	fprintf(stderr, "\n");
+	va_end(ap);
+}
+
+
+static void
+x9r(C9ctx *ctx, C9r *r)
+{
+    /* Callback called every time a new R-message is received. */
+	C9aux *a;
+	C9tag tag;
+	const char *path[2];
+	char buf[64];
+
+	a = ctx->aux;
+	switch (r->type) {
+	case Rread:
+		if (chatoff >= skipuntil)
+			output(r->read.data, r->read.size);
+		chatoff += r->read.size;
+		/* fallthrough */
+	case Ropen:
+		if ((a->flags & Joined) == 0 && printjoin) {
+			c9write(ctx, &tag, Chatfid, 0, buf, snprintf(buf, sizeof(buf), "JOIN %s to chat\n", nick));
+			a->flags |= Joined;
+		}
+		c9read(ctx, &tag, Chatfid, chatoff, chatoff < skipuntil ? skipuntil-chatoff : Msize);
+		break;
+
+	case Rerror:
+        /* Should return on this too */
+		break;
+
+	default:
+		break;
+	}
+}
+
 void
 x9devInfoInit(void)
 {
+    C9tag *cons;
+    C9fid c;
+    char *path;
+
+    x9di.ctx = calloc(1, sizeof(x9di.ctx));
+    x9di.ctx->begin = ctxbegin;
+    x9di.ctx->end = ctxend;
+    x9di.ctx->read = ctxread;
+    x9di.ctx->error = ctxerror;
+    x9di.ctx->aux = x9di.ctx;
+    x9di.ctx->r = x9r;
+
+    /* We have 9p, we can init */
     if(initdraw(NULL, 0, "x9dev") < 0)
         FatalError("can't open display");
 
@@ -41,27 +180,19 @@ x9devInfoInit(void)
     x9di.dpi = 100;
     x9di.bpl = bytesperline(Rect(0, 0, x9di.width, x9di.height), x9di.depth);
     x9di.fb = malloc(x9di.bpl * x9di.height);
-    if (x9di.fb == nil)
-        FatalError("couldn't allocate framebuffer");
 
-/*
-    snprint(buf, sizeof buf, "%s/mouse", display->devdir);
-    x9di.mouseFd = c9open(buf, O_RDWR | O_NONBLOCK);
-    if(x9di.mouseFd < 0)
-        FatalError("can't open mouse");
+    sprintf(path, "%s/mouse", _display->devdir);
+    c9walk(x9di.ctx, &x9di.mouse->tag, 1, x9di.mouse.fid, &path);
+    c9open(x9di.ctx, &x9di.mouse->tag, x9di.mouse.fid, O_RDWR|O_NONBLOCK);
 
-    snprint(buf, sizeof buf, "%s/cons", display->devdir);
-    x9di.keybdFd = c9open(buf, O_RDONLY | O_NONBLOCK);
-    if(x9di.keybdFd < 0)
-        FatalError("can't open keyboard");
+    sprintf(path, "%s/cons", _display->devdir);
+    c9walk(x9di.ctx, &x9di.mouse->tag, 1, x9di.keybd.fid, &path);
+    c9open(x9di.ctx, &x9di.keybd->tag, x9di.keybd.fid, O_RDONLY|O_NONBLOCK);
 
-    snprint(buf, sizeof buf, "%s/consctl", display->devdir);
-    x9di.consctlFd = c9open(buf, O_WRONLY);
-    if(x9di.consctlFd < 0)
-        FatalError("can't open consctl");
-    if(c9write(x9di.consctlFd, "rawon", 5) != 5)
-        FatalError("can't set rawon");
-*/
+    sprintf(path, "%s/consctl", _display->devdir);
+    c9walk(x9di.ctx, &cons, 1, c, &path);
+    c9open(x9di.ctx, &cons, c, O_WRONLY);
+    c9write(x9di.ctx, &cons, c, 0, "rawon", 5);
 }
 
 void
