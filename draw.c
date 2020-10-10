@@ -41,9 +41,11 @@ static CARD8 modmap[MAP_LENGTH];
 #define x9devUnrealizeCursor    (void *) NoopDDA
 #define x9devRecolorCursor  (void *) NoopDDA
 #define x9devSetCursorPosition  (void *) NoopDDA
+
+static int x9read(C9ctx, x9file, uint32_t);
+
 #define e    ev.u.u
 #define ek    ev.u.keyButtonPointer
-
 static void
 x9devSendKeybdEvent(int k, int t)
 {
@@ -120,7 +122,7 @@ x9devMouseRead(int *x, int *y, int *b)
     int n;
 
     /* Magic numbers here are the size of a message from /dev/mouse and its offsets */
-    if((n = x9read(x9di->mouse, 1 + 4 * 12)) <= 0)
+    if((n = x9read(x9di->ctx, x9di->mouse, 1 + 4 * 12)) <= 0)
         return 0;
 
     if (n != 1 + 4 * 12)
@@ -144,7 +146,7 @@ x9devKeybdRead(void)
     static int  n = 0;
     wchar_t rune;
 
-    if (x9read(x9di->keydb, 1) != 1)
+    if (x9read(x9di->ctx, x9di->keydb, 1) != 1)
         return 0;
 
     rune = s[0];
@@ -168,10 +170,7 @@ x9devKeybdRead(void)
 static void
 x9devInfoInit(void)
 {
-
-    char    buf[256];
-
-    /* Here we want to open up a new device in /dev/draw */
+    /* 
     if(initdraw(NULL, 0, "x9dev") < 0)
         FatalError("can't open display");
 
@@ -200,6 +199,7 @@ x9devInfoInit(void)
         FatalError("can't open consctl");
     if(c9write(x9di.consctlFd, "rawon", 5) != 5)
         FatalError("can't set rawon");
+    */
 }
 
 static int  
@@ -480,7 +480,7 @@ x9checkmod(unsigned int k, DeviceIntPtr pDev)
 }
 
 static int
-x9read(C9aux aux, uint32_t count)
+x9read(C9ctx ctx, x9file file, uint32_t count)
 {
-    return c9read(aux->ctx, &aux->tag, aux->f, aux->wroff, 1 + 4 * 12);
+    return c9read(ctx, &file->tag, 0, file->wroff, count);
 }

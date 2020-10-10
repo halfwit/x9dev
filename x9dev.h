@@ -55,13 +55,17 @@
 #include "keymap.h"
 #include "c9/c9.h"
 
+#define Msize 8192
+#define KF      0xF000
+#define Kdown   0x80
+#define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
+
 typedef struct x9file x9file;
 struct x9file {
-	int f;
-	int flags;
-	uint8_t rdbuf[Msize];
-	uint8_t wrbuf[Msize];
-	uint32_t wroff;
+	uint8_t     rdbuf[Msize];
+	uint8_t     wrbuf[Msize];
+	uint32_t    wroff;
+    C9tag       *tag;
 };
 
 typedef struct x9devInfo x9devInfo;
@@ -74,15 +78,11 @@ struct x9devInfo
     int     dpi;
     int     bpl;
     C9ctx   *ctx;
+    /* Our three files we care about */
     x9file  *mouse;
     x9file  *keybd;
-    x9file  *cons;
+    x9file  *draw;
 };
-
-
-#define KF      0xF000
-#define Kdown   0x80
-#define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
 
 int debug = 0;
 
