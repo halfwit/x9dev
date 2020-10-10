@@ -126,6 +126,8 @@ ctxerror(const char *fmt, ...)
 static void
 x9r(C9ctx *ctx, C9r *r)
 {
+    C9aux *a;
+    
     /* Callback called every time a new R-message is received. */
 	a = ctx->aux;
 	switch (r->type) {
