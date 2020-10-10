@@ -26,6 +26,42 @@
 #endif
 #include "x9dev.h"
 
+
+static void
+x9devInfoInit(void)
+{
+    /* 
+    if(initdraw(NULL, 0, "x9dev") < 0)
+        FatalError("can't open display");
+
+    x9di.depth = screen->depth;
+    x9di.width = Dx(screen->r);
+    x9di.width -= x9di.width&(screen->depth/8);
+    x9di.dpi = 100;
+    x9di.bpl = bytesperline(Rect(0, 0, x9di.width, x9di.height), x9di.depth);
+    x9di.fb = malloc(x9di.bpl * x9di.height);
+    if (x9di.fb == nil)
+        FatalError("couldn't allocate framebuffer");
+
+    snprint(buf, sizeof buf, "%s/mouse", display->devdir);
+    x9di.mouseFd = c9open(buf, O_RDWR | O_NONBLOCK);
+    if(x9di.mouseFd < 0)
+        FatalError("can't open mouse");
+
+    snprint(buf, sizeof buf, "%s/cons", display->devdir);
+    x9di.keybdFd = c9open(buf, O_RDONLY | O_NONBLOCK);
+    if(x9di.keybdFd < 0)
+        FatalError("can't open keyboard");
+
+    snprint(buf, sizeof buf, "%s/consctl", display->devdir);
+    x9di.consctlFd = c9open(buf, O_WRONLY);
+    if(x9di.consctlFd < 0)
+        FatalError("can't open consctl");
+    if(c9write(x9di.consctlFd, "rawon", 5) != 5)
+        FatalError("can't set rawon");
+    */
+}
+
 void
 InitOutput(ScreenInfo *si, int argc, char *argv[])
 {

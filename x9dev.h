@@ -56,9 +56,17 @@
 #include "c9/c9.h"
 
 #define Msize 8192
-#define KF      0xF000
-#define Kdown   0x80
 #define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
+
+/* NOOPs for now */
+#define x9devSaveScreen (void *) NoopDDA
+#define x9devConstrainCursor    (void *) NoopDDA
+#define x9devDisplayCursor  (void *) NoopDDA
+#define x9devRealizeCursor  (void *) NoopDDA
+#define x9devUnrealizeCursor    (void *) NoopDDA
+#define x9devRecolorCursor  (void *) NoopDDA
+#define x9devSetCursorPosition  (void *) NoopDDA
+
 
 typedef struct x9file x9file;
 struct x9file {
@@ -96,6 +104,7 @@ static PixmapFormatRec formats[] = {
 
 DeviceIntPtr x9devMouse;
 DeviceIntPtr x9devKeybd;
+x9devInfo x9di;
 
 Bool x9checkmod(unsigned int, DeviceIntPtr);
 Bool x9devScreenInit(ScreenPtr, int, char **);

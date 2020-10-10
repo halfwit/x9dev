@@ -1,8 +1,8 @@
 srcs = [
     'x9dev.c',
-    'draw.c',
-    'c9/c9.c',
-    'c9/c9.h',
+    'keyboard.c',
+    'mouse.c',
+    'screen.c',
     '../../mi/miinitext.c',
     '../../mi/mi.h',
     'x9dev.h',
@@ -18,8 +18,9 @@ x9dev_server = executable(
     srcs,
     include_directories: inc, 
     dependencies: common_dep,
-    object: '/usr/local/plan9/lib/libdraw.a',
     link_with: [
+        c9,
+        libdraw,
         libxserver_main,
         libxserver_fb,
         libxserver,
