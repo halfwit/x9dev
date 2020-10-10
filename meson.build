@@ -4,6 +4,7 @@ srcs = [
     'c9/c9.c',
     'c9/c9.h',
     '../../mi/miinitext.c',
+    '../../mi/.mi.h',
     'x9dev.h',
     'keymap.h',
 ]

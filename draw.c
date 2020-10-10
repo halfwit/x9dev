@@ -75,7 +75,7 @@ x9devSendMouseEvent(int x, int y, int b, int t)
 static void
 x9devRefreshScreen(int x1, int y1, int x2, int y2)
 {
-    /* 
+    /*
     Rectangle r;
     uchar *p;
     int n;
@@ -105,7 +105,7 @@ End:
 static void
 x9devResize(void)
 {
-    /*
+    /* 
     if (getwindow(display, Refnone) < 0)
         FatalError("can't reattach to window");
 
@@ -117,10 +117,10 @@ x9devResize(void)
 static int
 x9devMouseRead(int *x, int *y, int *b)
 {
-    char    buf[1+4*12];
     int n;
 
-    if ((n = c9read(x9di.mouseFd, buf, sizeof buf)) <= 0)
+    /* Magic numbers here are the size of a message from /dev/mouse and its offsets */
+    if((n = x9read(x9di->mouse, 1 + 4 * 12)) <= 0)
         return 0;
 
     if (n != 1 + 4 * 12)
@@ -130,9 +130,9 @@ x9devMouseRead(int *x, int *y, int *b)
         x9devResize();
         return 0;
     }
-    *x = atoi(buf + 1 + 0 * 12) - screen->r.min.x;
-    *y = atoi(buf + 1 + 1 * 12) - screen->r.min.y;
-    *b = atoi(buf + 1 + 2 * 12);
+    *x = atoi(x9di->mouse->rbuf + 1 + 0 * 12) - screen->r.min.x;
+    *y = atoi(x9di->mouse->rbuf + 1 + 1 * 12) - screen->r.min.y;
+    *b = atoi(x9di->mouse->rbuf + 1 + 2 * 12);
 
     return 1;
 }
@@ -144,7 +144,7 @@ x9devKeybdRead(void)
     static int  n = 0;
     wchar_t rune;
 
-    if (c9read(x9di.keybdFd, s + n, 1) != 1)
+    if (x9read(x9di->keydb, 1) != 1)
         return 0;
 
     rune = s[0];
@@ -171,6 +171,7 @@ x9devInfoInit(void)
 
     char    buf[256];
 
+    /* Here we want to open up a new device in /dev/draw */
     if(initdraw(NULL, 0, "x9dev") < 0)
         FatalError("can't open display");
 
@@ -476,4 +477,10 @@ Bool
 x9checkmod(unsigned int k, DeviceIntPtr pDev)
 {
     return modmap[k] != 0;
+}
+
+static int
+x9read(C9aux aux, uint32_t count)
+{
+    return c9read(aux->ctx, &aux->tag, aux->f, aux->wroff, 1 + 4 * 12);
 }

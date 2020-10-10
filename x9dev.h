@@ -32,29 +32,39 @@
 #define XK_PUBLISHING
 #include <X11/keysym.h>
 #include <X11/keysymdef.h>
-#include "servermd.h"
 #define PSZ 8
-#include "fb.h"
+//#include "fb.h"
 #include "colormapst.h"
-#include "gcstruct.h"
-#include "mipointer.h"
-#include "micmap.h"
 #include "dix.h"
+#include "exevents.h"
+#include "extinit.h"
+#include "gcstruct.h"
+#include "glx_extinit.h"
+#include "input.h"
+#include "micmap.h"
+#include "mipointer.h"
 #include "miline.h"
+#include "scrnintstr.h"
+#include "servermd.h"
 #include "shadow.h"
 #include "xkbsrv.h"
 #include "xserver-properties.h"
-#include "exevents.h"
-#include "extinit.h"
+#include "mi.h" /* miEnqueue mieqProcessInputEvents */
+
+/* Our local includes */
 #include "keymap.h"
-#include "mi.h"
-#include "glx_extinit.h"
-#include "input.h"
-#include "scrnintstr.h"
 #include "c9/c9.h"
 
-typedef struct x9devInfo x9devInfo;
+typedef struct x9file x9file;
+struct x9file {
+	int f;
+	int flags;
+	uint8_t rdbuf[Msize];
+	uint8_t wrbuf[Msize];
+	uint32_t wroff;
+};
 
+typedef struct x9devInfo x9devInfo;
 struct x9devInfo
 {
     char    *fb;
@@ -63,10 +73,12 @@ struct x9devInfo
     int     height;
     int     dpi;
     int     bpl;
-    int     mouseFd;
-    int     keybdFd;
-    int     consctlFd;
+    C9ctx   *ctx;
+    x9file  *mouse;
+    x9file  *keybd;
+    x9file  *cons;
 };
+
 
 #define KF      0xF000
 #define Kdown   0x80
