@@ -106,9 +106,12 @@ DeviceIntPtr x9devKeybd;
 x9devInfo x9di;
 Screen *screen;
 
+/* Callbacks, etc */
 Bool x9checkmod(unsigned int, DeviceIntPtr);
 Bool x9devScreenInit(ScreenPtr, int, char **);
 int x9devKeybdProc(DeviceIntPtr, int);
 int x9devMouseProc(DeviceIntPtr, int);
+int x9devMouseHandle(void);
+int x9devKeybdHandle(void);
 
 #endif

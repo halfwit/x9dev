@@ -71,7 +71,7 @@ x9devMouseRead(int *x, int *y, int *b)
 }
 
 
-static int  
+int  
 x9devMouseHandle(void)
 {
     int x, y, b, but, t;

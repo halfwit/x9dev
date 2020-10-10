@@ -79,7 +79,7 @@ x9devKeybdRead(void)
     return rune;
 }
 
-static int  
+int  
 x9devKeybdHandle(void)
 {
     unsigned char   k, m;

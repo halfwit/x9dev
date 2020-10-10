@@ -3,8 +3,6 @@ srcs = [
     'keyboard.c',
     'mouse.c',
     'screen.c',
-    '../../mi/miinitext.c',
-    '../../mi/mi.h',
     'x9dev.h',
     'keymap.h',
 ]
@@ -21,6 +19,7 @@ x9dev_server = executable(
     link_with: [
         c9,
         libdraw,
+        libxserver_mi
         libxserver_main,
         libxserver_fb,
         libxserver,
