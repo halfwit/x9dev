@@ -27,6 +27,8 @@
 
 #include "x9dev.h"
 
+extern x9devInfo x9di;
+
 void
 x9devInfoInit(void)
 {

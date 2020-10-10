@@ -55,7 +55,7 @@ End:
 }
 
 
-static void
+void
 x9devResize(void)
 {
     if (getwindow(_display, Refnone) < 0)
