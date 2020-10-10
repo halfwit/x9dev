@@ -151,6 +151,7 @@ x9devInfoInit(void)
     C9tag *cons;
     C9fid cfd;
     C9aux *c;
+    char path[256];
 
 	c = calloc(1, sizeof(*c));
 	c->ctx = calloc(1, sizeof(c->ctx));
