@@ -53,7 +53,7 @@ x9devMouseRead(int *x, int *y, int *b)
     int n;
 
     /* Magic numbers here are the size of a message from /dev/mouse and its offsets */
-    if((n = c9read(x9di.ctx, &x9di.mouse->tag, x9di.mouse.f, x9di.mouse->wroff, 1 + 4 * 12)) <= 0)
+    if((n = c9read(x9di.ctx, &x9di->mouse->tag, x9di->mouse.f, x9di->mouse->wroff, 1 + 4 * 12)) <= 0)
         return 0;
 
     if (n != 1 + 4 * 12)
