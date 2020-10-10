@@ -66,13 +66,15 @@
 #define x9devRecolorCursor  (void *) NoopDDA
 #define x9devSetCursorPosition  (void *) NoopDDA
 
+typedef struct C9aux C9aux;
 
-typedef struct x9file x9file;
-struct x9file {
-    C9fid    fid;
-    C9tag    tag;
-	uint8_t  rdbuf[Msize];
-	uint8_t  wrbuf[Msize];
+struct C9aux {
+	C9ctx *ctx;
+    C9tag *tag;
+	int f;
+	int flags;
+	uint8_t rdbuf[Msize];
+	uint8_t wrbuf[Msize];
 	uint32_t wroff;
 };
 
@@ -86,8 +88,8 @@ struct x9devInfo
     int     dpi;
     int     bpl;
     C9ctx   *ctx;
-    x9file  *mouse;
-    x9file  *keybd;
+    C9aux  *mouse;
+    C9aux  *keybd;
 };
 
 int debug = 0;
