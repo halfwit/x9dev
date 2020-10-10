@@ -57,7 +57,7 @@ x9devKeybdRead(void)
 {
     wchar_t rune;
 
-    if (c9read(x9di.ctx, &x9di.keybd->tag, 0, x9di->keybd->wroff, 1) != 1)
+    if (c9read(x9di.ctx, &x9di.keybd->tag, 0, x9di.keybd->wroff, 1) != 1)
         return 0;
 
     rune = x9di.keybd->rdbuf[0];
