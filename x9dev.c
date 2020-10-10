@@ -127,11 +127,6 @@ static void
 x9r(C9ctx *ctx, C9r *r)
 {
     /* Callback called every time a new R-message is received. */
-	C9aux *a;
-	C9tag tag;
-	const char *path[2];
-	char buf[64];
-
 	a = ctx->aux;
 	switch (r->type) {
 	case Rread:
@@ -151,8 +146,8 @@ x9devInfoInit(void)
     C9tag *cons;
     C9fid cfd;
     C9aux *c;
-    char path[256];
-
+    char path[256]; /* Plan9 Maxpath */
+ 
 	c = calloc(1, sizeof(*c));
 	c->ctx = calloc(1, sizeof(c->ctx));
 	c->ctx->read = ctxread;
