@@ -33,7 +33,7 @@
 #include <X11/keysym.h>
 #include <X11/keysymdef.h>
 #define PSZ 8
-//#include "fb.h"
+#include "fb.h" /* fbSetVisualTypes */
 #include "colormapst.h"
 #include "dix.h"
 #include "exevents.h"

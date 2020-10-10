@@ -435,8 +435,6 @@ x9devScreenInit(ScreenPtr pScreen, int argc, char *argv[])
     if (!fbSetVisualTypesAndMasks(x9di.depth, v, 8, r, g, b))
         return FALSE;
 
-    if (monitorResolution)
-        x9di.dpi = monitorResolution;
     if (!fbScreenInit(pScreen, x9di.fb, x9di.width, x9di.height,
         x9di.dpi, x9di.dpi, x9di.width, x9di.depth))
         return FALSE;
