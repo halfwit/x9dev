@@ -56,6 +56,7 @@
 
 #define Msize 8192
 #define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
+typedef (void*) nil
 
 /* NOOPs for now */
 #define x9devSaveScreen (void *) NoopDDA
@@ -108,6 +109,7 @@ x9devInfo x9di;
 /* Callbacks, etc */
 Bool x9checkmod(unsigned int, DeviceIntPtr);
 Bool x9devScreenInit(ScreenPtr, int, char **);
+void x9devInfoInit(void);
 int x9devKeybdProc(DeviceIntPtr, int);
 int x9devMouseProc(DeviceIntPtr, int);
 int x9devMouseHandle(void);

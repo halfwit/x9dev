@@ -27,7 +27,7 @@
 
 #include "x9dev.h"
 
-static void
+void
 x9devInfoInit(void)
 {
     if(initdraw(NULL, 0, "x9dev") < 0)
