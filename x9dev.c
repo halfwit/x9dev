@@ -150,6 +150,7 @@ x9devInfoInit(void)
 {
     C9tag *cons;
     C9fid cfd;
+    C9aux *c;
     char *path;
 
     x9di.ctx = calloc(1, sizeof(x9di.ctx));
@@ -157,7 +158,7 @@ x9devInfoInit(void)
     x9di.ctx->end = ctxend;
     x9di.ctx->read = ctxread;
     x9di.ctx->error = ctxerror;
-    x9di.ctx->aux = x9di.ctx;
+    x9di.ctx->aux = c;
     x9di.ctx->r = x9r;
 
     /* We have 9p, we can init */
