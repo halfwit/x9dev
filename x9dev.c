@@ -182,12 +182,12 @@ x9devInfoInit(void)
     x9di.fb = malloc(x9di.bpl * x9di.height);
 
     sprintf(path, "%s/mouse", _display->devdir);
-    c9walk(x9di.ctx, &x9di.mouse->tag, 1, x9di.mouse.f, &path);
-    c9open(x9di.ctx, &x9di.mouse->tag, x9di.mouse.f, O_RDWR|O_NONBLOCK);
+    c9walk(x9di.ctx, &x9di->mouse->tag, 1, x9di->mouse.f, &path);
+    c9open(x9di.ctx, &x9di->mouse->tag, x9di->mouse.f, O_RDWR|O_NONBLOCK);
 
     sprintf(path, "%s/cons", _display->devdir);
-    c9walk(x9di.ctx, &x9di.mouse->tag, 1, x9di.keybd.f, &path);
-    c9open(x9di.ctx, &x9di.keybd->tag, x9di.keybd.f, O_RDONLY|O_NONBLOCK);
+    c9walk(x9di.ctx, &x9di->keybd->tag, 1, x9di->keybd.f, &path);
+    c9open(x9di.ctx, &x9di->keybd->tag, x9di->keybd.f, O_RDONLY|O_NONBLOCK);
 
     sprintf(path, "%s/consctl", _display->devdir);
     c9walk(x9di.ctx, &cons, 1, cfd, &path);
