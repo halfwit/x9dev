@@ -27,6 +27,7 @@
 #include "x9dev.h"
 
 extern DeviceIntPtr x9devMouse;
+int x, y, oldx, oldy;
 
 #define e    ev.u.u
 #define ek    ev.u.keyButtonPointer
@@ -114,6 +115,9 @@ x9devMouseProc(DeviceIntPtr pDevice, int what)
     DevicePtr pDev = (DevicePtr)pDevice;
     Atom btn_labels[3] = {0};
     Atom axes_labels[2] = {0};
+
+    /* Init too */
+    x = y = oldx = oldy = 0;
 
     switch (what) {
     case DEVICE_INIT:

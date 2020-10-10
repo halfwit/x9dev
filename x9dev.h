@@ -56,7 +56,7 @@
 
 #define Msize 8192
 #define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
-typedef (void*) nil
+typedef (void*) nil;
 
 /* NOOPs for now */
 #define x9devSaveScreen (void *) NoopDDA
