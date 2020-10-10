@@ -25,6 +25,7 @@
 #include <dix-config.h>
 #endif
 
+#include <errno.h>
 #include "x9dev.h"
 
 extern x9devInfo x9di;
@@ -134,22 +135,11 @@ x9r(C9ctx *ctx, C9r *r)
 	a = ctx->aux;
 	switch (r->type) {
 	case Rread:
-		if (chatoff >= skipuntil)
-			output(r->read.data, r->read.size);
-		chatoff += r->read.size;
-		/* fallthrough */
+		break;
 	case Ropen:
-		if ((a->flags & Joined) == 0 && printjoin) {
-			c9write(ctx, &tag, Chatfid, 0, buf, snprintf(buf, sizeof(buf), "JOIN %s to chat\n", nick));
-			a->flags |= Joined;
-		}
-		c9read(ctx, &tag, Chatfid, chatoff, chatoff < skipuntil ? skipuntil-chatoff : Msize);
 		break;
-
 	case Rerror:
-        /* Should return on this too */
 		break;
-
 	default:
 		break;
 	}
