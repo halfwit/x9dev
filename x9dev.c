@@ -24,13 +24,12 @@
 #ifdef HAVE_DIX_CONFIG_H
 #include <dix-config.h>
 #endif
-#include "x9dev.h"
 
+#include "x9dev.h"
 
 static void
 x9devInfoInit(void)
 {
-    /* 
     if(initdraw(NULL, 0, "x9dev") < 0)
         FatalError("can't open display");
 
@@ -43,6 +42,7 @@ x9devInfoInit(void)
     if (x9di.fb == nil)
         FatalError("couldn't allocate framebuffer");
 
+/*
     snprint(buf, sizeof buf, "%s/mouse", display->devdir);
     x9di.mouseFd = c9open(buf, O_RDWR | O_NONBLOCK);
     if(x9di.mouseFd < 0)
@@ -59,7 +59,7 @@ x9devInfoInit(void)
         FatalError("can't open consctl");
     if(c9write(x9di.consctlFd, "rawon", 5) != 5)
         FatalError("can't set rawon");
-    */
+*/
 }
 
 void

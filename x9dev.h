@@ -51,9 +51,8 @@
 #include "xserver-properties.h"
 #include "mi.h" /* miEnqueue mieqProcessInputEvents */
 
-/* Our local includes */
-#include "keymap.h"
 #include "c9/c9.h"
+#include "libdraw/draw.h"
 
 #define Msize 8192
 #define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
@@ -70,10 +69,10 @@
 
 typedef struct x9file x9file;
 struct x9file {
-	uint8_t     rdbuf[Msize];
-	uint8_t     wrbuf[Msize];
-	uint32_t    wroff;
-    C9tag       *tag;
+    C9tag    tag;
+	uint8_t  rdbuf[Msize];
+	uint8_t  wrbuf[Msize];
+	uint32_t wroff;
 };
 
 typedef struct x9devInfo x9devInfo;
@@ -105,6 +104,7 @@ static PixmapFormatRec formats[] = {
 DeviceIntPtr x9devMouse;
 DeviceIntPtr x9devKeybd;
 x9devInfo x9di;
+Screen *screen;
 
 Bool x9checkmod(unsigned int, DeviceIntPtr);
 Bool x9devScreenInit(ScreenPtr, int, char **);

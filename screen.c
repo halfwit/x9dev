@@ -28,8 +28,7 @@
 
 static void
 x9devRefreshScreen(int x1, int y1, int x2, int y2)
-{
-    /*
+{ 
     Rectangle r;
     uchar *p;
     int n;
@@ -53,20 +52,17 @@ x9devRefreshScreen(int x1, int y1, int x2, int y2)
 
 End:
     flushimage(display, 1);
-    */
 }
 
 
 static void
 x9devResize(void)
 {
-    /* 
     if (getwindow(display, Refnone) < 0)
         FatalError("can't reattach to window");
 
     draw(screen, screen->r, display->white, nil, ZP);
     x9devRefreshScreen(0, 0, x9di.width, x9di.height);
-    */
 }
 
 static void

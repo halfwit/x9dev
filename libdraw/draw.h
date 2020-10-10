@@ -171,7 +171,7 @@ typedef void	(*Reffn)(Image*, Rectangle, void*);
 struct Screen
 {
 	Display	*display;	/* display holding data */
-	int	id;		/* id of system-held Screen */
+	int		id;			/* id of system-held Screen */
 	Image	*image;		/* unused; for reference only */
 	Image	*fill;		/* color to paint behind windows */
 };
@@ -196,7 +196,7 @@ struct Display
 	Image		*transparent;
 	Image		*image;
 	uchar		*buf;
-	int		bufsize;
+	int			bufsize;
 	uchar		*bufp;
 	Font		*defaultfont;
 	Subfont		*defaultsubfont;
@@ -208,14 +208,14 @@ struct Display
 struct Image
 {
 	Display		*display;	/* display holding data */
-	int		id;		/* id of system-held Image */
-	Rectangle	r;		/* rectangle in data area, local coords */
+	int			id;			/* id of system-held Image */
+	Rectangle	r;			/* rectangle in data area, local coords */
 	Rectangle 	clipr;		/* clipping region */
-	int		depth;		/* number of bits per pixel */
+	int			depth;		/* number of bits per pixel */
 	ulong		chan;
-	int		repl;		/* flag: data replicates to tile clipr */
+	int			repl;		/* flag: data replicates to tile clipr */
 	Screen		*screen;	/* 0 if not a window */
-	Image		*next;	/* next in list of windows */
+	Image		*next;		/* next in list of windows */
 };
 
 struct RGB
@@ -240,20 +240,20 @@ struct RGB
 struct	Fontchar
 {
 	int		x;		/* left edge of bits */
-	uchar		top;		/* first non-zero scan-line */
-	uchar		bottom;		/* last non-zero scan-line + 1 */
-	char		left;		/* offset of baseline */
-	uchar		width;		/* width of baseline */
+	uchar	top;	/* first non-zero scan-line */
+	uchar	bottom;	/* last non-zero scan-line + 1 */
+	char	left;	/* offset of baseline */
+	uchar	width;	/* width of baseline */
 };
 
 struct	Subfont
 {
 	char		*name;
 	short		n;		/* number of chars in font */
-	uchar		height;		/* height of image */
-	char		ascent;		/* top of image to baseline */
-	Fontchar 	*info;		/* n+1 character descriptors */
-	Image		*bits;		/* of font */
+	uchar		height;	/* height of image */
+	char		ascent;	/* top of image to baseline */
+	Fontchar 	*info;	/* n+1 character descriptors */
+	Image		*bits;	/* of font */
 	int		ref;
 };
 
@@ -276,18 +276,18 @@ enum
 
 struct Cachefont
 {
-	Rune		min;	/* lowest rune value to be taken from subfont */
-	Rune		max;	/* highest rune value+1 to be taken from subfont */
-	int		offset;	/* position in subfont of character at min */
-	char		*name;			/* stored in font */
-	char		*subfontname;		/* to access subfont */
+	Rune	min;			/* lowest rune value to be taken from subfont */
+	Rune	max;			/* highest rune value+1 to be taken from subfont */
+	int		offset;			/* position in subfont of character at min */
+	char	*name;			/* stored in font */
+	char	*subfontname;	/* to access subfont */
 };
 
 struct Cacheinfo
 {
 	ushort		x;		/* left edge of bits */
-	uchar		width;		/* width of baseline */
-	char		left;		/* offset of baseline */
+	uchar		width;	/* width of baseline */
+	char		left;	/* offset of baseline */
 	Rune		value;	/* value of character at this slot in cache */
 	ushort		age;
 };
@@ -296,7 +296,7 @@ struct Cachesubf
 {
 	ulong		age;	/* for replacement */
 	Cachefont	*cf;	/* font info that owns us */
-	Subfont		*f;	/* attached subfont */
+	Subfont		*f;		/* attached subfont */
 };
 
 struct Font
