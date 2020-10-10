@@ -42,7 +42,7 @@ static CARD8 modmap[MAP_LENGTH];
 #define x9devRecolorCursor  (void *) NoopDDA
 #define x9devSetCursorPosition  (void *) NoopDDA
 
-static int x9read(C9ctx, x9file, uint32_t);
+static int x9read(C9ctx *, x9file *, uint32_t);
 
 #define e    ev.u.u
 #define ek    ev.u.keyButtonPointer
@@ -122,7 +122,7 @@ x9devMouseRead(int *x, int *y, int *b)
     int n;
 
     /* Magic numbers here are the size of a message from /dev/mouse and its offsets */
-    if((n = x9read(x9di->ctx, x9di->mouse, 1 + 4 * 12)) <= 0)
+    if((n = x9read(x9di.ctx, x9di.mouse, 1 + 4 * 12)) <= 0)
         return 0;
 
     if (n != 1 + 4 * 12)
@@ -132,9 +132,9 @@ x9devMouseRead(int *x, int *y, int *b)
         x9devResize();
         return 0;
     }
-    *x = atoi(x9di->mouse->rbuf + 1 + 0 * 12) - screen->r.min.x;
-    *y = atoi(x9di->mouse->rbuf + 1 + 1 * 12) - screen->r.min.y;
-    *b = atoi(x9di->mouse->rbuf + 1 + 2 * 12);
+    *x = atoi(x9di.mouse->rbuf + 1 + 0 * 12) - screen->r.min.x;
+    *y = atoi(x9di.mouse->rbuf + 1 + 1 * 12) - screen->r.min.y;
+    *b = atoi(x9di.mouse->rbuf + 1 + 2 * 12);
 
     return 1;
 }
@@ -146,7 +146,7 @@ x9devKeybdRead(void)
     static int  n = 0;
     wchar_t rune;
 
-    if (x9read(x9di->ctx, x9di->keydb, 1) != 1)
+    if (x9read(x9di.ctx, x9di.keydb, 1) != 1)
         return 0;
 
     rune = s[0];
@@ -480,7 +480,7 @@ x9checkmod(unsigned int k, DeviceIntPtr pDev)
 }
 
 static int
-x9read(C9ctx ctx, x9file file, uint32_t count)
+x9read(C9ctx *ctx, x9file *file, uint32_t count)
 {
     return c9read(ctx, &file->tag, 0, file->wroff, count);
 }
