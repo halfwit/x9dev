@@ -92,8 +92,6 @@ struct x9devInfo
     C9aux  *keybd;
 };
 
-int debug = 0;
-
 static PixmapFormatRec formats[] = {
     { 1,    1,  BITMAP_SCANLINE_PAD },
     { 8,    8,  BITMAP_SCANLINE_PAD },

@@ -29,6 +29,7 @@
 #include "x9dev.h"
 
 extern x9devInfo x9di;
+int debug = 0;
 
 /* 
  * 9p functions, used in draw and here 
