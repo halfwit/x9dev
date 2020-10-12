@@ -161,8 +161,7 @@ x9devInfoInit(void)
     c->ctx->r = x9r;
 
     /* We have 9p, we can init */
-    //if(initdraw(c->ctx, "x9dev")< 0)
-    if(initdraw(NULL, 0, "x9dev") < 0)
+    if(initdraw(NULL, "x9dev") < 0)
         FatalError("can't open display");
 
     x9di.depth = screen->depth;

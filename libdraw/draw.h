@@ -1,3 +1,5 @@
+#include <pthread.h>
+
 typedef struct	Cachefont Cachefont;
 typedef struct	Cacheinfo Cacheinfo;
 typedef struct	Cachesubf Cachesubf;
@@ -16,7 +18,7 @@ typedef unsigned long ulong;
 typedef unsigned char uchar;
 typedef unsigned short ushort;
 typedef unsigned int Rune;
-typedef void* nil;
+#define nil ((void*)0)
 
 enum
 {
@@ -204,6 +206,7 @@ struct Display
 	Image		*windows;
 	Image		*screenimage;
 	int		_isnewdisplay;
+	pthread_mutex_t qlock;
 };
 
 struct Image
@@ -338,8 +341,8 @@ extern void	drawerror(Display*, char*);
 extern int	flushimage(Display*, int);
 extern int	freeimage(Image*);
 extern int	_freeimage1(Image*);
-extern int	geninitdraw(char*, void(*)(Display*, char*), char*, char*, char*, int);
-extern int	initdraw(void(*)(Display*, char*), char*, char*);
+extern int	geninitdraw(char*, void(*)(Display*, char*), char*, char*, int);
+extern int	initdraw(void(*)(Display*, char*), char*);
 extern int	newwindow(char*);
 extern Display*	initdisplay(char*, char*, void(*)(Display*, char*));
 extern int	loadimage(Image*, Rectangle, uchar*, int);

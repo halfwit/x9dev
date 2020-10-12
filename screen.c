@@ -49,7 +49,6 @@ x9devRefreshScreen(int x1, int y1, int x2, int y2)
         p += x9di.bpl;
         r.min.y++;
     }
-
 End:
     flushimage(_display, 1);
 }
