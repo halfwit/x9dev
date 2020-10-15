@@ -307,6 +307,7 @@ initdisplay(char *dev, char *win, void(*error)(Display*, char*))
 	disp->opaque = disp->white;
 	disp->transparent = disp->black;
 
+	/* We still need this */
 	//dir = dirfstat(ctlfd);
 	//if(dir!=nil && dir->type=='i'){
 	//	disp->local = 1;
