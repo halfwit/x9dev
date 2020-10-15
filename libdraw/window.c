@@ -1,4 +1,7 @@
 #include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <assert.h>
 #include "draw.h"
 
 typedef struct Memimage Memimage;
@@ -15,7 +18,6 @@ allocscreen(Image *image, Image *fill, int public)
 
 	d = image->display;
 	if(d != fill->display){
-		werrstr("allocscreen: image and fill on different displays");
 		return nil;
 	}
 	s = malloc(sizeof(Screen));
@@ -136,7 +138,7 @@ topbottom(Image **w, int n, int top)
 
 	if(n < 0){
     Ridiculous:
-		fprint(2, "top/bottom: ridiculous number of windows\n");
+		fprintf(2, "top/bottom: ridiculous number of windows\n");
 		return;
 	}
 	if(n == 0)
@@ -152,7 +154,7 @@ topbottom(Image **w, int n, int top)
 	d = w[0]->display;
 	for(i=1; i<n; i++)
 		if(w[i]->display != d){
-			fprint(2, "top/bottom: windows not on same screen\n");
+			fprintf(2, "top/bottom: windows not on same screen\n");
 			return;
 		}
 
