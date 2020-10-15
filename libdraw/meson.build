@@ -10,6 +10,7 @@ libdraw_src = [
     'init.c',
     'loadimage.c',
     'openfont.c',
+    'window.c',
 ]
 
 libdraw = static_library(
