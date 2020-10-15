@@ -5,7 +5,7 @@ srcs = [
     'screen.c',
     'x9dev.h',
     'keymap.h',
-    '../../mi/miinitext.c',
+    '../../../mi/miinitext.c',
 ]
 
 cc_args = [
