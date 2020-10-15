@@ -50,7 +50,7 @@
 #include "xkbsrv.h"
 #include "xserver-properties.h"
 #include "mi.h" /* miEnqueue mieqProcessInputEvents */
-#include "draw.h"
+#include "libdraw/draw.h"
 
 #define Msize 8192
 #define NUMFORMATS (sizeof(formats)/sizeof((formats)[0]))
