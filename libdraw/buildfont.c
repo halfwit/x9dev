@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "draw.h"
 
 static char*
@@ -43,7 +44,6 @@ buildfont(Display *d, char *buf, char *name)
 	fnt->ascent = strtol(s, &s, 0);
 	s = skip(s);
 	if(fnt->height<=0 || fnt->ascent<=0){
-		werrstr("bad height or ascent in font file");
 		goto Err2;
 	}
 	fnt->width = 0;
@@ -56,20 +56,17 @@ buildfont(Display *d, char *buf, char *name)
 	do{
 		/* must be looking at a number now */
 		if(*s<'0' || '9'<*s){
-			werrstr(badform, s-buf);
 			goto Err3;
 		}
 		min = strtol(s, &s, 0);
 		s = skip(s);
 		/* must be looking at a number now */
 		if(*s<'0' || '9'<*s){
-			werrstr(badform, s-buf);
 			goto Err3;
 		}
 		max = strtol(s, &s, 0);
 		s = skip(s);
 		if(*s==0 || min>Runemax || max>Runemax || min>max){
-			werrstr("illegal subfont range");
     Err3:
 			freefont(fnt);
 			return 0;

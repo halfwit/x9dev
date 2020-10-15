@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include "draw.h"
 
@@ -38,7 +39,6 @@ openfont(Display *d, char *name)
 	char *buf;
 
 	if((buf = readfile(name)) == nil){
-		werrstr("openfont: %r");
 		return nil;
 	}
 	fnt = buildfont(d, buf, name);
