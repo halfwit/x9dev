@@ -60,16 +60,14 @@ geninitdraw(char *devdir, void(*error)(Display*, char*), char *label, char *wind
 	}
 
 	fd = open("/env/font", O_RDONLY);
-	if(fd >= 0){
-		read(fd, buf, sizeof(buf));
-		fontname = buf;
-	}
+	read(fd, buf, sizeof(buf));
+	fontname = buf;
 
 	/*
 	 * Build fonts with caches==depth of screen, for speed.
 	 * If conversion were faster, we'd use 0 and save memory.
 	 */
-	if(fontname == nil){
+	if(strcmp(fontname, "") != 0){
 		snprintf(buf, sizeof buf, "%d %d\n0 %d\t%s\n", df->height, df->ascent,
 			df->n-1, deffontname);
 //BUG: Need something better for this	installsubfont("*default*", df);

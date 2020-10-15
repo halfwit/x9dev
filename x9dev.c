@@ -36,15 +36,6 @@ x9devInfoInit(void)
 {
 	int fd;
     char path[256]; /* Plan9 Maxpath */
- 
-	c = calloc(1, sizeof(*c));
-	c->ctx = calloc(1, sizeof(c->ctx));
-	c->ctx->read = ctxread;
-	c->ctx->begin = ctxbegin;
-	c->ctx->end = ctxend;
-	c->ctx->error = ctxerror;
-	c->ctx->aux = c;
-    c->ctx->r = x9r;
 
     /* We have 9p, we can init */
     if(initdraw(NULL, "x9dev") < 0)
@@ -56,7 +47,6 @@ x9devInfoInit(void)
     x9di.dpi = 100;
     x9di.bpl = bytesperline(Rect(0, 0, x9di.width, x9di.height), x9di.depth);
     x9di.fb = malloc(x9di.bpl * x9di.height);
-    x9di.ctx = c->ctx;
 
     sprintf(path, "%s/mouse", _display->devdir);
 	x9di.mfd = open(path, O_RDWR|O_NONBLOCK);

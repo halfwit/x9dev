@@ -54,13 +54,13 @@ x9devMouseRead(int *x, int *y, int *b)
     int n;
     char buf[1+4*12];
 
-    if((n = read(x9di.mfd, buf, 1 + 4 * 12)) < = 0)
+    if((n = read(x9di.mfd, buf, 1 + 4 * 12)) <= 0)
         return 0;
 
     if (n != 1 + 4 * 12)
         FatalError("Bad mouse event");
 
-    if (buf == 'r') {
+    if (buf[0] == 'r') {
         x9devResize();
         return 0;
     }
