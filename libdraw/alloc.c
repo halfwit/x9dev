@@ -1,8 +1,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include "draw.h"
 
 Image*
@@ -125,7 +125,7 @@ namedimage(Display *d, char *name)
 	if(flushimage(d, 0) < 0)
 		goto Error;
 
-	seek(d->ctlfd, 0);
+	lseek(d->ctlfd, 0, SEEK_SET);
 	if(read(d->ctlfd, buf, sizeof buf) < 12*12)
 		goto Error;
 	buf[12*12] = '\0';
