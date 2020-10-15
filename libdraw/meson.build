@@ -1,9 +1,14 @@
 libdraw_src = [
     'arith.c',
+    'buildfont.c',
     'bytesperline.c',
+    'chan.c',
+    'defont.c',
     'draw.c',
+    'getdefont.c',
     'init.c',
     'loadimage.c',
+    'openfont.c',
 ]
 
 libdraw = static_library(
