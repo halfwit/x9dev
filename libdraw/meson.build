@@ -1,6 +1,7 @@
 libdraw_src = [
     'alloc.c',
     'arith.c',
+    'badrect.c',
     'buildfont.c',
     'bytesperline.c',
     'chan.c',
