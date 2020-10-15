@@ -12,6 +12,7 @@ libdraw_src = [
     'init.c',
     'loadimage.c',
     'openfont.c',
+    'subfontcache.c',
     'window.c',
 ]
 
