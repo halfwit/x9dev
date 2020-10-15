@@ -1,15 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
 #include "draw.h"
-#include "../c9/c9.h"
 
 Display	*_display;
 _Font	*font;
 Image	*screen;
-C9ctx 	*ctx;
+
+enum{
+	DISP_BUFSIZE = 8000, /* Play with this some, see if changes much */
+};
 
 static char deffontname[] = "*default*";
 Screen	*_screen;
@@ -34,10 +37,10 @@ drawshutdown(void)
 int
 geninitdraw(char *devdir, void(*error)(Display*, char*), char *label, char *windir, int ref)
 {
-	C9tag ftag, ltag, wtag;
 	int fd, n;
 	char *fontname;
-	char path[256]; /* Maxpath */
+	char path[256];
+	char buf[128];
 	Subfont *df;
 
 	_display = initdisplay(devdir, windir, error);
@@ -56,13 +59,10 @@ geninitdraw(char *devdir, void(*error)(Display*, char*), char *label, char *wind
 		return -1;
 	}
 
-	sprintf(path, "/env/font");
-	c9walk(ctx, &ftag, 1, fd, &path);
-	c9open(ctx, &ftag, fd, O_RDONLY);
+	fd = open("/env/font", O_RDONLY);
 	if(fd >= 0){
-		c9read(ctx, &ftag, fd, 0, 128);
-			//fontname = buf;
-		}
+		read(fd, buf, sizeof(buf));
+		fontname = buf;
 	}
 
 	/*
@@ -88,11 +88,11 @@ geninitdraw(char *devdir, void(*error)(Display*, char*), char *label, char *wind
 	 */
 	if(label != nil){
 		snprintf(buf, sizeof buf, "%s/label", _display->windir);
-		fd = open(buf, OREAD);
+		fd = open(buf, O_RDONLY);
 		if(fd >= 0){
 			read(fd, _display->oldlabel, (sizeof _display->oldlabel)-1);
 			close(fd);
-			fd = create(buf, OWRITE, 0666);
+			fd = open(buf, O_CREAT|O_WRONLY, 0666);
 			if(fd >= 0){
 				write(fd, label, strlen(label));
 				close(fd);
@@ -131,7 +131,7 @@ gengetwindow(Display *d, char *winname, Image **winp, Screen **scrp, int ref)
 
 	obuf[0] = 0;
 retry:
-	fd = open(winname, OREAD);
+	fd = open(winname, O_RDONLY);
 	if(fd<0 || (n=read(fd, buf, sizeof buf-1))<=0){
 		if((image=d->image) == nil){
 			*winp = nil;
@@ -222,7 +222,7 @@ initdisplay(char *dev, char *win, void(*error)(Display*, char*))
 		return nil;
 
 	sprintf(buf, "%s/draw/new", dev);
-	ctlfd = open(buf, ORDWR|OCEXEC);
+	ctlfd = open(buf, O_RDWR);
 	if(ctlfd < 0){
     Error1:
 		free(t);
@@ -240,18 +240,18 @@ initdisplay(char *dev, char *win, void(*error)(Display*, char*))
 	isnew = 0;
 	if(n < NINFO)	/* this will do for now, we need something better here */
 		isnew = 1;
-	sprint(buf, "%s/draw/%d/data", dev, atoi(info+0*12));
-	datafd = open(buf, ORDWR|OCEXEC);
+	sprintf(buf, "%s/draw/%d/data", dev, atoi(info+0*12));
+	datafd = open(buf, O_RDWR);
 	if(datafd < 0)
 		goto Error2;
-	sprint(buf, "%s/draw/%d/refresh", dev, atoi(info+0*12));
-	reffd = open(buf, OREAD|OCEXEC);
+	sprintf(buf, "%s/draw/%d/refresh", dev, atoi(info+0*12));
+	reffd = open(buf, O_RDWR);
 	if(reffd < 0){
     Error3:
 		close(datafd);
 		goto Error2;
 	}
-	disp = mallocz(sizeof(Display), 1);
+	disp = calloc(sizeof(Display), 1);
 	if(disp == nil){
     Error4:
 		close(reffd);
@@ -265,7 +265,7 @@ initdisplay(char *dev, char *win, void(*error)(Display*, char*))
 		goto Error4;
 	}
 	if(n >= NINFO){
-		image = mallocz(sizeof(Image), 1);
+		image = calloc(sizeof(Image), 1);
 		if(image == nil)
 			goto Error5;
 		image->display = disp;
@@ -284,12 +284,7 @@ initdisplay(char *dev, char *win, void(*error)(Display*, char*))
 	}
 
 	disp->_isnewdisplay = isnew;
-	disp->bufsize = iounit(datafd);
-	if(disp->bufsize <= 0)
-		disp->bufsize = 8000;
-	if(disp->bufsize < 512){
-		goto Error5;
-	}
+	disp->bufsize = DISP_BUFSIZE;
 	disp->buf = malloc(disp->bufsize+5);	/* +5 for flush message */
 	if(disp->buf == nil)
 		goto Error5;
@@ -348,8 +343,8 @@ _closedisplay(Display *disp, int isshutdown)
 	if(disp == _display)
 		_display = nil;
 	if(disp->oldlabel[0]){
-		snprint(buf, sizeof buf, "%s/label", disp->windir);
-		fd = open(buf, OWRITE);
+		snprintf(buf, sizeof buf, "%s/label", disp->windir);
+		fd = open(buf, O_WRONLY);
 		if(fd >= 0){
 			write(fd, disp->oldlabel, strlen(disp->oldlabel));
 			close(fd);
@@ -402,9 +397,8 @@ drawerror(Display *d, char *s)
 	if(d != nil && d->error != nil)
 		(*d->error)(d, s);
 	else{
-		errstr(err, sizeof err);
-		fprint(2, "draw: %s: %s\n", s, err);
-		exits(s);
+		fprintf(stderr, "draw: %s: %s\n", s, err);
+		exit(1);
 	}
 }
 

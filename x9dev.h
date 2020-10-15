@@ -51,7 +51,6 @@
 #include "xserver-properties.h"
 #include "mi.h" /* miEnqueue mieqProcessInputEvents */
 
-#include "c9/c9.h"
 #include "libdraw/draw.h"
 
 #define Msize 8192
@@ -66,17 +65,6 @@
 #define x9devRecolorCursor  (void *) NoopDDA
 #define x9devSetCursorPosition  (void *) NoopDDA
 
-typedef struct C9aux C9aux;
-
-struct C9aux {
-	C9ctx *ctx;
-    C9tag *tag;
-	int f;
-	int flags;
-	uint8_t rdbuf[Msize];
-	uint8_t wrbuf[Msize];
-	uint32_t wroff;
-};
 
 typedef struct x9devInfo x9devInfo;
 struct x9devInfo
@@ -87,9 +75,8 @@ struct x9devInfo
     int     height;
     int     dpi;
     int     bpl;
-    C9ctx   *ctx;
-    C9aux  *mouse;
-    C9aux  *keybd;
+    int     mfd;
+    int     kfd;
 };
 
 static PixmapFormatRec formats[] = {

@@ -7,5 +7,4 @@ libdraw_src = [
 libdraw = static_library(
     'libdraw',
     libdraw_src,
-    link_with: libc9,
 )

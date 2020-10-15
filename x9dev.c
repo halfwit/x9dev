@@ -31,124 +31,10 @@
 extern x9devInfo x9di;
 int debug = 0;
 
-/* 
- * 9p functions, used in draw and here 
- */
-static int
-wrsend(C9aux *a)
-{
-	uint32_t n;
-	int w;
-
-	for (n = 0; n < a->wroff; n += w) {
-		if ((w = write(a->f, a->wrbuf+n, a->wroff-n)) <= 0) {
-			if (errno == EINTR)
-				continue;
-			if (errno != EPIPE) /* remote end closed */
-				perror("write");
-			return -1;
-		}
-	}
-	a->wroff = 0;
-
-	return 0;
-}
-
-static uint8_t *
-ctxbegin(C9ctx *ctx, uint32_t size)
-{
-    /* Should return a buffer to store 'size' bytes. Nil means no memory. */
-	uint8_t *b;
-	C9aux *a;
-
-	a = ctx->aux;
-	if (a->wroff + size > sizeof(a->wrbuf)) {
-		if (wrsend(a) != 0 || a->wroff + size > sizeof(a->wrbuf))
-			return NULL;
-	}
-	b = a->wrbuf + a->wroff;
-	a->wroff += size;
-
-	return b;
-}
-
-static int
-ctxend(C9ctx *ctx)
-{
-    /*
-	 * Marks the end of a message. Callback may decide if any accumulated
-	 * messages should be sent to the server/client.
-	 */
-	(void)ctx;
-	return 0;
-}
-
-static uint8_t *
-ctxread(C9ctx *ctx, uint32_t size, int *err)
-{
-    /*
-	 * Should return a pointer to the data (exactly 'size' bytes) read.
-	 * Set 'err' to non-zero and return NULL in case of error.
-	 * 'err' set to zero (no error) should be used to return from c9process
-	 * early (timeout on read to do non-blocking operations, for example).
-	 */
-	uint32_t n;
-	int r;
-	C9aux *a;
-
-	a = ctx->aux;
-	*err = 0;
-	for (n = 0; n < size; n += r) {
-		if ((r = read(a->f, a->rdbuf+n, size-n)) <= 0) {
-			if (errno == EINTR)
-				continue;
-			close(a->f);
-			return NULL;
-		}
-	}
-
-	return a->rdbuf;
-}
-
-__attribute__ ((format (printf, 1, 2)))
-static void
-ctxerror(const char *fmt, ...)
-{
-
-	va_list ap;
-
-	va_start(ap, fmt);
-	vfprintf(stderr, fmt, ap);
-	fprintf(stderr, "\n");
-	va_end(ap);
-}
-
-
-static void
-x9r(C9ctx *ctx, C9r *r)
-{
-    C9aux *a;
-    
-    /* Callback called every time a new R-message is received. */
-	a = ctx->aux;
-	switch (r->type) {
-	case Rread:
-		break;
-	case Ropen:
-		break;
-	case Rerror:
-		break;
-	default:
-		break;
-	}
-}
-
 void
 x9devInfoInit(void)
 {
-    C9tag *cons;
-    C9fid cfd;
-    C9aux *c;
+	int fd;
     char path[256]; /* Plan9 Maxpath */
  
 	c = calloc(1, sizeof(*c));
@@ -173,17 +59,15 @@ x9devInfoInit(void)
     x9di.ctx = c->ctx;
 
     sprintf(path, "%s/mouse", _display->devdir);
-    c9walk(x9di.ctx, &x9di.mouse->tag, 1, x9di.mouse->f, &path);
-    c9open(x9di.ctx, &x9di.mouse->tag, x9di.mouse->f, O_RDWR|O_NONBLOCK);
+	x9di.mfd = open(path, O_RDWR|O_NONBLOCK);
 
     sprintf(path, "%s/cons", _display->devdir);
-    c9walk(x9di.ctx, &x9di.keybd->tag, 1, x9di.keybd->f, &path);
-    c9open(x9di.ctx, &x9di.keybd->tag, x9di.keybd->f, O_RDONLY|O_NONBLOCK);
+	x9di.kfd = open(path, O_RDONLY|O_NONBLOCK);
 
     sprintf(path, "%s/consctl", _display->devdir);
-    c9walk(x9di.ctx, &cons, 1, cfd, &path);
-    c9open(x9di.ctx, &cons, cfd, O_WRONLY);
-    c9write(x9di.ctx, &cons, cfd, 0, "rawon", 5);
+	fd = open(path, O_WRONLY);
+	write(fd, "rawon", 5);
+	close(fd);
 }
 
 void

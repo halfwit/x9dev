@@ -1,4 +1,3 @@
-subdir('libc9')
 subdir('libdraw')
 
 srcs = [
@@ -20,7 +19,6 @@ x9dev_server = executable(
     include_directories: inc, 
     dependencies: common_dep,
     link_with: [
-        libc9,
         libdraw,
         libxserver_mi,
         libxserver_main,

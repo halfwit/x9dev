@@ -55,14 +55,16 @@ x9devSendKeybdEvent(int k, int t)
 static wchar_t
 x9devKeybdRead(void)
 {
+    static char s[3];
+    static int  n = 0;
     wchar_t rune;
 
-    if (c9read(x9di.ctx, &x9di.keybd->tag, x9di.keybd->f, x9di.keybd->wroff, 1) != 1)
+    if(read(x9di.kfd, s+n, 1) != 1)
         return 0;
 
-    rune = x9di.keybd->rdbuf[0];
-    /* TODO: Handle longer runes
-    if ((rune & 0x80) != 0x00) {
+    rune = s[0];
+
+    if (n > 0 || (rune & 0x80) != 0x00) {
         if (mbtowc(&rune, s, n + 1) == -1) {
             if (++n == 3)
                 n = 0;
@@ -70,7 +72,7 @@ x9devKeybdRead(void)
         }
         n = 0;
     }
-    */
+    
     if (rune == Kdown)
         rune = 0x99;
     else if (rune & KF)
