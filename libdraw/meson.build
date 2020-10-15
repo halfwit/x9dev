@@ -7,6 +7,8 @@ libdraw_src = [
 libdraw = static_library(
     'libdraw',
     libdraw_src,
+    include_directories: inc,
+    dependencies: common_dep,
 )
 
 install_data('draw.h', install_dir: xorgsdkdir)
