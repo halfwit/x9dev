@@ -34,9 +34,3 @@ x9dev_server = executable(
     install: true,
     c_args: cc_args,
 )
-
-install_man(configure_file(
-    input: 'man/x9dev.man',
-    output: 'x9dev.1',
-    configuration: manpage_config,
-))
