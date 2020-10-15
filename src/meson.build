@@ -27,6 +27,8 @@ x9dev_server = executable(
         libxserver_fb,
         libxserver,
         libxserver_xkb_stubs,
+        libxserver_dix,
+        libxserver_xi,
         libxserver_glx,
         libglxvnd,
         libxserver_miext_shadow,
