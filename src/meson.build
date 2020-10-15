@@ -19,7 +19,10 @@ x9dev_server = executable(
         inc,
         include_directories('../libdraw'),
     ],
-    dependencies: common_dep,
+    dependencies: [
+        common_dep,
+        dependency('xi', version: '>= 1.2.99.1'),
+    ],
     link_with: [
         libdraw,
         libxserver_mi,
@@ -27,8 +30,6 @@ x9dev_server = executable(
         libxserver_fb,
         libxserver,
         libxserver_xkb_stubs,
-        libxserver_dix,
-        libxserver_xi,
         libxserver_glx,
         libglxvnd,
         libxserver_miext_shadow,
