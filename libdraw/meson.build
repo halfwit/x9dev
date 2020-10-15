@@ -7,6 +7,7 @@ libdraw_src = [
     'chan.c',
     'defont.c',
     'draw.c',
+    'freesubfont.c',
     'getdefont.c',
     'init.c',
     'loadimage.c',
