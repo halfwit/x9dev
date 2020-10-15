@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Michael Misch <michaelmisch1985@gmail.com> 
+ * Copyright (c) 2008 Federico G. Benavento <benavento@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -20,6 +20,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 #ifdef HAVE_DIX_CONFIG_H
 #include <dix-config.h>
 #endif
