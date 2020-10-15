@@ -1,3 +1,4 @@
+#include <string.h>
 #include "draw.h"
 
 static char channames[] = "rgbkamx";
