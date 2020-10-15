@@ -1,5 +1,7 @@
 libdraw_src = [
+    'arith.c',
     'bytesperline.c',
+    'draw.c',
     'init.c',
     'loadimage.c',
 ]
