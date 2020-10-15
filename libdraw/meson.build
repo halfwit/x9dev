@@ -2,7 +2,6 @@ libdraw_src = [
     'bytesperline.c',
     'init.c',
     'loadimage.c',
-    'libdraw/draw.h',
 ]
 
 libdraw = static_library(

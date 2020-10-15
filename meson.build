@@ -7,6 +7,7 @@ srcs = [
     'screen.c',
     'x9dev.h',
     'keymap.h',
+    'libdraw/draw.h',
 ]
 
 cc_args = [
