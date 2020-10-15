@@ -37,9 +37,8 @@ drawshutdown(void)
 int
 geninitdraw(char *devdir, void(*error)(Display*, char*), char *label, char *windir, int ref)
 {
-	int fd, n;
+	int fd;
 	char *fontname;
-	char path[256];
 	char buf[128];
 	Subfont *df;
 
