@@ -342,7 +342,7 @@ extern int	flushimage(Display*, int);
 extern int	freeimage(Image*);
 extern int	_freeimage1(Image*);
 extern int	geninitdraw(char*, void(*)(Display*, char*), char*, char*, int);
-extern int	initdraw(void(*)(Display*, char*), char*);
+extern int	initdraw(void(*)(Display*, char*), char*, char*);
 extern int	newwindow(char*);
 extern Display*	initdisplay(char*, char*, void(*)(Display*, char*));
 extern int	loadimage(Image*, Rectangle, uchar*, int);

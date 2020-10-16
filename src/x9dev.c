@@ -28,6 +28,7 @@
 #include <errno.h>
 #include "x9dev.h"
 
+char *chroot = "/";
 extern x9devInfo x9di;
 int debug = 0;
 
@@ -37,8 +38,7 @@ x9devInfoInit(void)
 	int fd;
     char path[256]; /* Plan9 Maxpath */
 
-    /* We have 9p, we can init */
-    if(initdraw(NULL, "x9dev") < 0)
+    if(initdraw(NULL, chroot, "x9dev") < 0)
         FatalError("can't open display");
 
     x9di.depth = screen->depth;
@@ -104,6 +104,9 @@ ddxProcessArgument(int argc, char **argv, int i)
     if (!strcmp(argv[i], "-D")){
         debug++;
         return 1;
+    } else if (!strcmp(argv[i], "-p")){
+        if (argc <= i)
+            chroot = argv[i+1];
     }
 
     return 0;
@@ -144,7 +147,7 @@ OsVendorInit(void)
 void
 OsVendorFatalError(const char *f, va_list args)
 {
-    
+
 }
 
 void

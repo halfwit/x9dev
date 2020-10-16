@@ -107,10 +107,10 @@ geninitdraw(char *devdir, void(*error)(Display*, char*), char *label, char *wind
 }
 
 int
-initdraw(void(*error)(Display*, char*), char *label)
+initdraw(void(*error)(Display*, char*), char *chroot, char *label)
 {
-	static char dev[] = "/dev";
-
+	char *dev;
+	sprintf(dev, "%s/dev/", chroot);
 	return geninitdraw(dev, error, label, dev, Refnone);
 }
 
