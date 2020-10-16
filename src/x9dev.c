@@ -141,6 +141,18 @@ OsVendorInit(void)
 
 }
 
+void
+OsVendorFatalError(const char *f, va_list args)
+{
+    
+}
+
+void
+CloseInput(void)
+{
+    mieqFini();
+}
+
 Bool
 LegalModifier(unsigned int k, DeviceIntPtr pDev)
 {
