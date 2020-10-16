@@ -17,7 +17,6 @@ x9dev_server = executable(
     srcs,
     include_directories: [
         inc,
-        '../../../miext/rootless',
         include_directories('../libdraw'),
     ],
     dependencies: [
@@ -34,7 +33,6 @@ x9dev_server = executable(
         libxserver_glx,
         libglxvnd,
         libxserver_miext_shadow,
-        libxserver_miext_rootless,
     ],
     install: true,
     c_args: cc_args,
