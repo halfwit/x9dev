@@ -1,4 +1,4 @@
-libdraw_src = [
+draw_src = [
     'alloc.c',
     'arith.c',
     'badrect.c',
@@ -17,11 +17,12 @@ libdraw_src = [
     'window.c',
 ]
 
-libdraw = static_library(
-    'libdraw',
-    libdraw_src,
+draw = static_library(
+    'draw',
+    draw_src,
     include_directories: inc,
     dependencies: common_dep,
+    install: true,
 )
 
 install_data('draw.h', install_dir: xorgsdkdir)

@@ -35,7 +35,7 @@ int debug = 0;
 void
 x9devInfoInit(void)
 {
-	int fd;
+    int fd;
     char path[256]; /* Plan9 Maxpath */
 
     if(initdraw(NULL, root, "x9dev") < 0)
